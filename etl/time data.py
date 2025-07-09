@@ -43,6 +43,7 @@ def transform_data(df, target_timezone='UTC'):
 def load_data_to_bq(df, table_name, project_id):
     try:
         client = bq.Client(project=project_id)
+
         job_config = bq.LoadJobConfig(
             write_disposition='WRITE_APPEND',
         )

@@ -60,5 +60,4 @@ if __name__ == '__main__':
     sheet_name = 'timeshift'
     table_name = os.getenv('TIMESHIFT_TABLE')
     project_id = os.getenv('GG_PROJECT_ID')
-    
     execute_pipeline(file_path, sheet_name, table_name, project_id)

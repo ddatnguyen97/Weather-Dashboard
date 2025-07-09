@@ -28,9 +28,9 @@ def transform_data(df):
         logging.error(f'An error occurred: {str(e)}')
         raise
 
-def load_data_to_dw(df, table_name, connection_string):
+def load_data_to_bq(df, table_name, project_id):
     try:
-        client = bq.Client()
+        client = bq.Client(project=project_id)
         job_config = bq.LoadJobConfig(
             write_disposition='WRITE_APPEND',
         )
@@ -46,12 +46,12 @@ def load_data_to_dw(df, table_name, connection_string):
         logging.error(f'Error loading data to BigQuery: {e}')
         raise
 
-def execute_pipeline(file_path, sheet_name, table_name):
+def execute_pipeline(file_path, sheet_name, table_name, project_id):
     try:
         df = extract_data(file_path, sheet_name)
         if df is not None:
             transformed_df = transform_data(df)
-            load_data_to_dw(transformed_df, table_name, None)
+            load_data_to_bq(transformed_df, table_name, project_id)
     except Exception as e:
         logging.error(f'An error occurred: {str(e)}')
         raise
@@ -60,4 +60,5 @@ if __name__ == '__main__':
     file_path = 'weather mapping.xlsx'
     sheet_name = 'weather_code'
     table_name = os.getenv('WEATHER_CODE_TABLE')
-    execute_pipeline(file_path, sheet_name, table_name)
+    project_id = os.getenv('GOOGLE_CLOUD_PROJECT')
+    execute_pipeline(file_path, sheet_name, table_name, project_id)
