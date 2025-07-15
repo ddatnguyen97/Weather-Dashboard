@@ -94,11 +94,9 @@ def transform_data(df, target_timezone='Asia/Ho_Chi_Minh'):
 def load_data_to_bq(df, table_name, project_id):
     try:
         client = bigquery.Client(project=project_id)
-
         job_config = bigquery.LoadJobConfig(
             write_disposition='WRITE_APPEND',
         )
-
         job = client.load_table_from_dataframe(
             df,
             table_name,
@@ -126,6 +124,6 @@ def execute_pipeline():
         logging.error(f'An error occurred: {str(e)}')
         raise
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     execute_pipeline()
     logging.info('Daily weather data ETL pipeline completed successfully.')

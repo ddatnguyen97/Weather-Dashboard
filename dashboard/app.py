@@ -13,11 +13,11 @@ app.layout = html.Div([
     html.Div(create_sidebar()),
     html.Div([
         create_navbar(),
-        html.Div(id="main-content", className="dashboard-container")
+        html.Div(id='main-content', className='dashboard-container')
     ], 
-    className="main-area")
+    className='main-area')
 ], 
-className="app-container")
+className='app-container')
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -4,8 +4,8 @@ import dash_bootstrap_components as dbc
 def create_navbar():
     return dbc.Navbar(
         html.Div([
-            html.H2("HCM City Weather Dashboard", className="navbar-title"),
+            html.H2('HCM City Weather Dashboard', className='navbar-title'),
         ],
     ),
-    className="navbar-container",
+    className='navbar-container',
 )
