@@ -12,7 +12,7 @@ def create_sidebar():
         ),
         dbc.Nav([
             dbc.NavLink('Daily Weather',
-                        href='/daily-weather',
+                        href='/weather',
                         active='exact',
                         className='sidebar-link',
                         id='tab-weather'),

@@ -1,13 +1,19 @@
+'''
+This script aggregates hourly weather data into daily summaries and loads the results into a BigQuery table.
+This script is created because I can't save the data in BigQuery directly due to free tier limitations.
+'''
+
 from google.cloud import bigquery as bq
 import pandas as pd
 import os
 import logging
 from dotenv import load_dotenv
+from pathlib import Path
 
 logging.basicConfig(level=logging.INFO)
 
 load_dotenv()
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GG_CREDENTIALS')
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 
 aggregation_query = f'''
     -- step 1: get mode weather_code per date
