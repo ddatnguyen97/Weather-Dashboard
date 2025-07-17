@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 logging.basicConfig(level=logging.INFO)
 
 load_dotenv()
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv("GG_CREDENTIALS")
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GG_CREDENTIALS')
 
 project_id = os.getenv('GOOGLE_CLOUD_PROJECT')
 table_name = os.getenv('AGGREGATED_TABLE')
@@ -37,4 +37,41 @@ def get_date(table_name, project_id):
         return df['current_date'].iloc[0]
     except Exception as e:
         logging.error(f'Error fetching current date: {e}')
+        return None
+
+def get_weather_icon(description):
+    weather_icon_map = {
+        'Clear sky': 'sun.gif',
+        'Mainly clear': 'mainly cloud.gif',
+        'Partly cloudy': 'mainly cloud.gif',
+        'Overcast': 'clouds.gif',
+        'Fog': 'foggy.gif',
+        'Depositing rime fog': 'foggy.gif',
+        'Drizzle: Light': 'drizzle.gif',
+        'Drizzle: Moderate': 'drizzle.gif',
+        'Drizzle: Dense': 'drizzle.gif',
+        'Freezing Drizzle: Light': 'freezing.gif',
+        'Freezing Drizzle: Dense': 'freezing.gif',
+        'Rain: Slight': 'rainfall.gif',
+        'Rain: Moderate': 'rainfall.gif',
+        'Rain: Heavy': 'rainfall.gif',
+        'Freezing Rain: Light': 'freezing.gif',
+        'Freezing Rain: Heavy': 'freezing.gif',
+        'Snow fall: Slight': 'snowfall.gif',
+        'Snow fall: Moderate': 'snowfall.gif',
+        'Snow fall: Heavy': 'snowfall.gif',
+        'Snow Grain': 'snowfall.gif',
+        'Rain showers: Slight': 'rain.gif',
+        'Rain showers: Moderate': 'rain.gif',
+        'Rain showers: Violent': 'rain.gif',
+        'Snow showers: Slight': 'snow.gif',
+        'Snow showers: Heavy': 'snow.gif',
+        'Thunderstorm: Slight': 'storm.gif',
+        'Thunderstorm: Slight with hail': 'storm.gif',
+        'Thunderstorm: Violent with hail': 'storm.gif'
+    }
+    try:
+        return weather_icon_map.get(description, 'day and night.gif')
+    except Exception as e:
+        logging.error(f'Error getting weather icon: {e}')
         return None

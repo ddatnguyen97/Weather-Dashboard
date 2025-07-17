@@ -29,7 +29,7 @@ className='app-container')
 
 def render_page_content(pathname):
     if pathname == '/weather':
-        return weather_layout
+        return weather_layout()
     # elif pathname == '/air-quality':
     #     return air_quality.layout
     

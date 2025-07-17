@@ -160,7 +160,7 @@ def get_weekly_weather_data(selected_date, table_name, project_id):
                 avg(temperature_2m) as temperature,
                 avg(relative_humidity_2m) as humidity,
                 sum(precipitation) as precipitation,
-                overall_weather
+                max(overall_weather) as overall_weather
             from
                 `{table_name}`
             where
@@ -168,7 +168,8 @@ def get_weekly_weather_data(selected_date, table_name, project_id):
             group by
                 date
         '''
-        df = fetch_data_from_bq(query, project_id)
+        result = fetch_data_from_bq(query, project_id)
+        df = pd.DataFrame(result)
         if df.empty:
             logging.info('No data found for the specified date range.')
             return pd.DataFrame(columns=['date', 'temperature', 'humidity', 'precipitation', 'overall_weather'])

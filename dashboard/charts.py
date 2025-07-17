@@ -1,48 +1,23 @@
 import dash_bootstrap_components as dbc
 from dash import html
+from utils import get_weather_icon
 
-# def create_daily_weather_card(date, avg_temp_icon, avg_temp_content, humidity_icon, humidity_content, precipitation_icon, precipitation_content, ):
-#     return dbc.Card(
-#         [
-#             dbc.CardHeader(
-#                 html.H6(date, className='card-header-title'),
-#                 className='card-header'
-#             ),
-#             dbc.CardBody([
-#                 dbc.Row([
-#                         html.Img(src=avg_temp_icon, className='card-icon'),
-#                         html.H4(avg_temp_content, className='card-content')
-#                 ]),
-#             ]),
-#             dbc.CardBody([
-#                 dbc.Row([
-#                         html.Img(src=humidity_icon, className='card-icon'),
-#                         html.H4(humidity_content, className='card-content')
-#                 ]),
-#             ]),
-#             dbc.CardBody([
-#                 dbc.Row([
-#                         html.Img(src=precipitation_icon, className='card-icon'),
-#                         html.H4(precipitation_content, className='card-content')
-#                 ]),
-#             ]),
-#         ],
-#         className='weather-card'
-#     )
-
-def create_weather_card(date, data_row=None):
+def create_weather_card(date, col, data_row=None):
     if data_row is None:
         return dbc.Card([
             dbc.CardHeader(date),
             dbc.CardBody('No Data', className='text-muted')
         ],)
     
+    description = data_row.get(col)
+    icon = get_weather_icon(description)
+
     return dbc.Card([
-        dbc.CardHeader(date),
+        dbc.CardHeader([date], className='card-header'),
         dbc.CardBody([
-            html.Img(src='assets/icons/thermometer.gif', className='card-icon'),
-            html.P(f"Temperature: {data_row['avg_temperature']:.2f}°C"),
-            html.P(f"Humidity: {data_row['avg_humidity']:.2f}%"),
-            html.P(f"Precipitation: {data_row['avg_precipitation']:.2f}mm")
+            html.Img(src=f'assets/icons/{icon}', className='card-icon'),
+            html.P(f"Temperature: {data_row['temperature']:.2f}°C", className='card-content'),
+            html.P(f"Humidity: {data_row['humidity']:.2f}%", className='card-content'),
+            html.P(f"Precipitation: {data_row['precipitation']:.2f}mm", className='card-content')
         ])
     ], className='weather-card')
