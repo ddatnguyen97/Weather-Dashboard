@@ -6,7 +6,9 @@ from components.navbar import create_navbar
 from components.sidebar import create_sidebar
 from tabs.weather import layout as weather_layout
 
-app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = Dash(__name__,
+            external_stylesheets=[dbc.themes.BOOTSTRAP],
+            suppress_callback_exceptions=True)
 
 navbar_div = create_navbar()
 sidebar_div = create_sidebar()
@@ -26,13 +28,11 @@ className='app-container')
     Output('main-content', 'children'),
     Input('url', 'pathname')
 )
-
 def render_page_content(pathname):
     if pathname == '/weather':
         return weather_layout()
     # elif pathname == '/air-quality':
-    #     return air_quality.layout
-    
+    #     return air_quality.layout    
 
 if __name__ == '__main__':
     app.run(debug=True)

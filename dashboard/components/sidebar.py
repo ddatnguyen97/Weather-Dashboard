@@ -11,7 +11,7 @@ def create_sidebar():
             className='sidebar-logo-container'
         ),
         dbc.Nav([
-            dbc.NavLink('Daily Weather',
+            dbc.NavLink('Weekly Weather',
                         href='/weather',
                         active='exact',
                         className='sidebar-link',
