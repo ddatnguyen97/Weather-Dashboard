@@ -1,8 +1,7 @@
-from components.cards import generate_weekly_weather_cards
+from components.cards import create_weather_card
 from metrics import get_weekly_weather_data
-from utils import get_week_range, get_date
-from charts import create_weather_card
-from dash import html, dcc
+from utils import get_date
+from dash import html
 import dash_bootstrap_components as dbc
 from utils import get_date
 from dotenv import load_dotenv

@@ -26,16 +26,16 @@
 /* Navbar container styles */
 .navbar-container {
   background-color: #fff !important;
-  border-radius: 0;
   padding: 1.5rem;
   height: 80px;
   display: flex;
   align-items: center;
-  width: 100%;
+  justify-content: space-between;
   box-sizing: border-box;
   border-radius: 10px;
   border: #5170d7 2px solid;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 1.5px;
 }
 
 /* Sidebar container styles */
@@ -49,6 +49,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 1.5px;
 }
 
 .sidebar-logo-container {
@@ -86,14 +87,6 @@
   color: #fff !important;
 }
 
-/* Sidebar logo styles */
-/* .sidebar-logo {
-  height: 65px;
-  width: 65px;
-  border-radius: 50%;
-  margin-left: 1rem;
-} */
-
 /* App container styles */
 .app-container {
   display: flex;
@@ -119,19 +112,16 @@
   box-sizing: border-box;
   border: 2px solid #dee2e6;
   border-radius: 10px;
+  margin: 1.5px;
 }
 
 /* Weather card styles */
 .weather-card {
   flex: 0 0 auto;
-  width: 160px;
-  min-height: 15%;
-  border-radius: 15px;
-  padding: 5px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f9;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
-  display: flex;
 }
 
 /* Card icon styles */
@@ -151,7 +141,37 @@
 
 /* Card header styles */
 .card-header {
-  background-color: #dee2e6;
-  color: #3f5aa3;
-  font-size: 0.8rem;
+  background-color: #3f5aa3;
+  color: white;
+  font-weight: 600;
+  padding: 8px;
+  text-align: center;
+  font-size: 16px;
+}
+
+/* Date picker styles */
+.date-picker {
+  /* transition: background-color 0.2s ease; */
+  /* background-color: transparent; */
+  /* font-size: 12px; */
+  /* font-weight: 600; */
+  /* color: #343a40; */
+  /* box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3); */
+  width: 200px;
+  /* padding: 6px 10px; */
+  /* border: 1px solid #ced4da; */
+}
+
+.date-picker input {
+  width: 200px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #00a99d;
+  border: 2px solid #f8f9fa;
+  border-radius: 5px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+}
+
+.date-picker:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
