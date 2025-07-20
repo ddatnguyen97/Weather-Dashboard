@@ -12,13 +12,15 @@ app = Dash(__name__,
 
 navbar_div = create_navbar()
 sidebar_div = create_sidebar()
+weather_report_div = weather_layout()
+# home_dive = home_layout()
 
 app.layout = html.Div([
     dcc.Location(id='url'),
     html.Div(sidebar_div),
     html.Div([
         navbar_div,
-        html.Div(id='main-content', className='dashboard-container')
+        html.Div(id='main-content', children=weather_report_div, className='dashboard-container')
     ], 
     className='main-area')
 ], 
@@ -28,11 +30,13 @@ className='app-container')
     Output('main-content', 'children'),
     Input('url', 'pathname')
 )
-def render_page_content(pathname):
+def render_page_content(pathname='/home'):
     if pathname == '/weather':
-        return weather_layout()
+        return weather_report_div
     # elif pathname == '/air-quality':
     #     return air_quality.layout    
+    # else:
+    #     return home_div
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -32,7 +32,7 @@
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  border-radius: 10px;
+  border-radius: 0 15px 0 0;
   border: #5170d7 2px solid;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 1.5px;
@@ -43,7 +43,7 @@
   background-color: #5379b5;
   padding: 1rem;
   /* border: 2px solid; */
-  border-radius: 10px;
+  border-radius: 15px 0 0 15px;
   width: 200px;
   height: 100vh;
   display: flex;
@@ -111,9 +111,14 @@
   overflow-y: auto;
   box-sizing: border-box;
   border: 2px solid #dee2e6;
-  border-radius: 10px;
+  border-radius: 0 0 15px 0;
   margin: 1.5px;
+  height: 100vh;
 }
+
+/* .weather-card-row {
+  height: 25vh;
+} */
 
 /* Weather card styles */
 .weather-card {
@@ -122,6 +127,7 @@
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
+  /* height: 25vh; */
 }
 
 /* Card icon styles */
@@ -174,4 +180,21 @@
 
 .date-picker:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Chart row styles */
+.chart-row {
+  height: fit-content;
+  margin-top: 1%;
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+/* Bar chart styles */
+.bar-chart-layout {
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+  border: 2px solid #f8f9fa;
+  border-radius: 10px;
+  /* max-height: ; */
 }
