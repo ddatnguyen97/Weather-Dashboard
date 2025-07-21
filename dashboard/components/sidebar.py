@@ -1,7 +1,24 @@
-from dash import html
+from dash import html, dcc
 import dash_bootstrap_components as dbc
+from dash import Input, Output, callback
 
-def create_sidebar():
+PAGES = {
+    '/home': {'label': 'Home', 'id': 'home-link'},
+    '/weather': {'label': 'Weather Report', 'id': 'weather-link'},
+    '/aqi': {'label': 'Air Quality', 'id': 'aqi-link'},
+}
+
+def create_sidebar(current_path='/home'):
+    nav_links = [
+        dbc.NavLink(
+            page['label'],
+            href=path,
+            id=page['id'],
+            active='exact',
+            className='sidebar-link'
+        ) for path, page in PAGES.items()
+    ]
+    
     return html.Div([
         html.Div(
             html.Img(
@@ -10,20 +27,12 @@ def create_sidebar():
             ),
             className='sidebar-logo-container'
         ),
-        dbc.Nav([
-            dbc.NavLink('Weekly Weather',
-                        href='/weather',
-                        active='exact',
-                        className='sidebar-link',
-                        id='tab-weather'),
-            dbc.NavLink('Air Quality Index',
-                        href='/daily-aqi',
-                        active='exact',
-                        className='sidebar-link',
-                        id='tab-aqi'),
-        ],
-        vertical=True,
-        pills=True,
-        className='sidebar-nav')
+
+        dcc.Location(id='sidebar-url', refresh=False),
+        dbc.Nav(
+                nav_links,
+                vertical=True,
+                pills=True,
+                className='sidebar-nav')
     ],
     className='sidebar-container')
