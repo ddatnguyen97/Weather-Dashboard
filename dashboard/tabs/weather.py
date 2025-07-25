@@ -30,6 +30,8 @@ def layout():
         precipitation_bar_chart = create_bar_chart(weekly_data, x_axis, y_axis)
         bar_chart_component = dcc.Graph(figure=precipitation_bar_chart, id='precipitation-bar-chart', className='bar-chart-layout')
 
+        
+
         return html.Div([
             html.Div(id='weather-cards-container', children=dbc.Row(weekly_cards), className='weather-card-row'),
             html.Div(id='precipitation-bar-chart-container', children=bar_chart_component, className='chart-row') 

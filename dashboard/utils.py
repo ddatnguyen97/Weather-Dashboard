@@ -2,6 +2,7 @@ from google.cloud import bigquery as bq
 import pandas as pd
 import logging
 from datetime import datetime, timedelta
+from scipy.stats import mode
 
 logging.basicConfig(level=logging.INFO)
 
@@ -66,3 +67,20 @@ def get_weather_icon(description):
     except Exception as e:
         logging.error(f'Error getting weather icon: {e}')
         return None
+    
+def get_wind_direction(degree):
+    try:
+        directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
+        ix = int((degree + 22.5) / 45) % 8
+        return directions[ix]
+    except Exception as e:
+        logging.error(f'Error getting wind direction: {e}')
+        return None
+
+def get_frequent_direction(direction, get_direction_func):
+    try:
+        labels = [get_direction_func(d) for d in direction]
+        return mode(labels).mode[0]
+    except Exception as e:
+        logging.error(f'Error getting frequent wind direction: {e}')
+        return None    

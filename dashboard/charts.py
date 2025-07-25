@@ -14,3 +14,15 @@ def create_bar_chart(df, x, y, color=None):
     )
 
     return figure
+
+def create_radar_chart(df, theta_val, color_val, color_continuous):
+    figure = px.bar_polar(df,
+                          r=None,
+                          theta=theta_val,
+                          color=color_val,
+                          color_continuous_scale=color_continuous,
+                          )
+    figure.update_layout(
+        title='Weekly Wind Report'
+    )
+    return figure

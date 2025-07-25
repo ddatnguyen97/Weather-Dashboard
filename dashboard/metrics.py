@@ -27,6 +27,8 @@ def get_weekly_weather_data(selected_date, table_name, project_id):
                     avg(temperature_2m) as temperature,
                     avg(relative_humidity_2m) as humidity,
                     sum(precipitation) as precipitation,
+                    avg(wind_speed_10m) as wind_speed,
+                    avg(wind_gusts_10m) as wind_gusts,
                     max(overall_weather) as overall_weather
                 from
                     `{table_name}`
@@ -55,6 +57,8 @@ def get_weekly_weather_data(selected_date, table_name, project_id):
                 temperature,
                 humidity,
                 precipitation,
+                wind_speed,
+                wind_gusts,
                 overall_weather
             from
                 weekday_label
@@ -63,7 +67,14 @@ def get_weekly_weather_data(selected_date, table_name, project_id):
         df = pd.DataFrame(result)
         if df.empty:
             logging.info('No data found for the specified date range.')
-            return pd.DataFrame(columns=['date','weekday', 'temperature', 'humidity', 'precipitation', 'overall_weather'])
+            return pd.DataFrame(columns=['date', 
+                                         'weekday', 
+                                         'temperature', 
+                                         'humidity', 
+                                         'precipitation',
+                                         'wind_speed',
+                                         'wind_gusts', 
+                                         'overall_weather'])
         return df
     except Exception as e:
         logging.error(f'Error fetching weekly weather data: {e}')
