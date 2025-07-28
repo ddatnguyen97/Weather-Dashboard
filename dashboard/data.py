@@ -8,12 +8,12 @@ import pandas as pd
 import os
 import logging
 from dotenv import load_dotenv
-from pathlib import Path
+from utils import get_wind_direction_label
 
 logging.basicConfig(level=logging.INFO)
 
 load_dotenv()
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GG_PROJECT_CREDS')
 
 aggregation_query = f'''
     -- step 1: get mode weather_code per date
@@ -24,9 +24,9 @@ with weather_mode as (
     count(*) as freq,
     row_number() over (partition by d.date order by count(*) desc) as rn
   from
-    `personal-project-465307.weather_dashboard_development.hourly_weather_data` as hw
+    `{os.getenv('HOURLY_WEATHER_TABLE')}` as hw
   join
-    `personal-project-465307.weather_dashboard_development.dim_date` as d
+    `{os.getenv('DATE_TABLE')}` as d
     on hw.date_id = d.id
   group by
     d.date, hw.weather_code
@@ -40,7 +40,7 @@ mode_per_day as (
   from
     weather_mode wm
   join
-    `personal-project-465307.weather_dashboard_development.weather_code` as wc
+    `{os.getenv('WEATHER_CODE_TABLE')}` as wc
     on wm.weather_code = wc.id
   where wm.rn = 1
 )
@@ -71,21 +71,21 @@ select
     dw.daylight_duration,
     mpd.overall_weather
 from
-    `personal-project-465307.weather_dashboard_development.hourly_weather_data` as hw
+    `{os.getenv('HOURLY_WEATHER_TABLE')}` as hw
 join
-    `personal-project-465307.weather_dashboard_development.day_night` as ts
+    `{os.getenv('TIMESHIFT_TABLE')}` as ts
     on hw.is_day = ts.id
 join
-    `personal-project-465307.weather_dashboard_development.dim_date` as d
+    `{os.getenv('DATE_TABLE')}` as d
     on hw.date_id = d.id
 join
-    `personal-project-465307.weather_dashboard_development.dim_time` as t
+    `{os.getenv('TIME_TABLE')}` as t
     on hw.time_id = t.id
 join
-    `personal-project-465307.weather_dashboard_development.weather_code` as wc
+    `{os.getenv('WEATHER_CODE_TABLE')}` as wc
     on hw.weather_code = wc.id
 join
-    `personal-project-465307.weather_dashboard_development.daily_weather_data` as dw
+    `{os.getenv('DAILY_WEATHER_TABLE')}` as dw
     on hw.date_id = dw.date_id
 left join
     mode_per_day mpd
@@ -106,6 +106,8 @@ table_schema = [
         bq.SchemaField('wind_speed_10m', 'FLOAT'),
         bq.SchemaField('wind_gusts_10m', 'FLOAT'),
         bq.SchemaField('wind_direction_10m', 'FLOAT'),
+        bq.SchemaField('wind_direction_label', 'STRING'),
+        bq.SchemaField('daily_frequent_direction', 'STRING'),
         bq.SchemaField('sunshine_duration', 'FLOAT'),
         bq.SchemaField('sunrise', 'STRING'),
         bq.SchemaField('sunset', 'STRING'),
@@ -132,13 +134,13 @@ def transform_df(df):
         logging.error(f'Error transforming DataFrame: {e}')
         raise
 
-def load_to_bq(df, table_name, project_id):
+def load_to_bq(df, table_name, project_id, schema):
     try:
         client = bq.Client(project=project_id)
         
         job_config = bq.LoadJobConfig(
             write_disposition='WRITE_APPEND',
-            schema=table_schema,
+            schema=schema,
         )
 
         job = client.load_table_from_dataframe(
@@ -165,7 +167,15 @@ if __name__ == '__main__':
         logging.info(f'Data fetched successfully with {len(transformed_data)} rows.')
     else:
         logging.warning('No data fetched.')
-
     print(transformed_data.info())
-    load_to_bq(transformed_data, table_name, project_id)
+    transformed_data['wind_direction_label'] = transformed_data['wind_direction_10m'].apply(get_wind_direction_label)
+    
+    daily_modes = (
+        transformed_data
+        .groupby('date')['wind_direction_label']
+        .agg(lambda x: x.mode().iloc[0] if not x.mode().empty else None)
+        .reset_index(name='daily_frequent_direction')
+    )
+    transformed_data = transformed_data.merge(daily_modes, on='date', how='left')
+    load_to_bq(transformed_data, table_name, project_id, table_schema)
     logging.info('Aggregation and loading completed successfully.')

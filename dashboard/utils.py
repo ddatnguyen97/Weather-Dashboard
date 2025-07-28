@@ -67,20 +67,18 @@ def get_weather_icon(description):
     except Exception as e:
         logging.error(f'Error getting weather icon: {e}')
         return None
-    
-def get_wind_direction(degree):
+
+def get_wind_direction_label(degree):
     try:
         directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
-        ix = int((degree + 22.5) / 45) % 8
-        return directions[ix]
+        return directions[int((degree + 22.5) / 45) % 8]
     except Exception as e:
-        logging.error(f'Error getting wind direction: {e}')
+        logging.error(f'Error getting wind direction label: {e}')
         return None
 
-def get_frequent_direction(direction, get_direction_func):
+def get_frequent_wind_direction(column):
     try:
-        labels = [get_direction_func(d) for d in direction]
-        return mode(labels).mode[0]
+        return mode(column.dropna()).mode[0]
     except Exception as e:
-        logging.error(f'Error getting frequent wind direction: {e}')
-        return None    
+        logging.error(f'Error getting daily frequent wind direction: {e}')
+        return None

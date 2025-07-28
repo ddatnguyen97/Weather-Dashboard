@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv("GG_CREDENTIALS")
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv("GG_PROJECT_CREDS")
 
 table_name = os.getenv('AGGREGATED_TABLE')
 project_id = os.getenv('BQ_PROJECT_ID')

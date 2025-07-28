@@ -1,17 +1,17 @@
 from components.cards import create_weather_card
 from metrics import get_weekly_weather_data
-from charts import create_bar_chart
+from charts import create_bar_chart, create_radar_chart
 from utils import get_date
 from dash import html, dcc
+import pandas as pd
 import dash_bootstrap_components as dbc
 from dash import Input, Output, callback
-from utils import get_date
 from dotenv import load_dotenv
 import os
 import logging
 
 load_dotenv()
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GG_CREDENTIALS')
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GG_PROJECT_CREDS')
 
 table_name = os.getenv('AGGREGATED_TABLE')
 project_id = os.getenv('BQ_PROJECT_ID')
@@ -29,8 +29,10 @@ def layout():
         x_axis = weekly_data['date']
         precipitation_bar_chart = create_bar_chart(weekly_data, x_axis, y_axis)
         bar_chart_component = dcc.Graph(figure=precipitation_bar_chart, id='precipitation-bar-chart', className='bar-chart-layout')
-
         
+        # theta_value = weekly_data['']
+
+        # wind_radar_chart = create_radar_chart(weekly_data, )
 
         return html.Div([
             html.Div(id='weather-cards-container', children=dbc.Row(weekly_cards), className='weather-card-row'),
@@ -63,14 +65,15 @@ def update_weather_layout(selected_date):
         y_axis = weekly_data['precipitation']
         x_axis = weekly_data['date']
         figure = create_bar_chart(weekly_data, x_axis, y_axis)
-        graph_component = dcc.Graph(figure=figure, className='bar-chart-layout')
+        graph_component_barchart = dcc.Graph(
+            id='precipitation-bar-chart',
+            figure=figure,
+            className='bar-chart-layout')
         
-        return cards_layout, graph_component
+        
+
+        return cards_layout, graph_component_barchart
 
     except Exception as e:
         logging.error(f"Callback error: {e}")
         return "Failed to update cards.", None
-
-def update_weather_dashboard(selected_date):
-    cards, figure = update_weather_layout(selected_date)
-    return cards, dcc.Graph(id='precipitation-bar-chart', figure=figure)
