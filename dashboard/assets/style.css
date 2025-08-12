@@ -189,6 +189,8 @@
   display: flex;
   height: 100%;
   width: 100%;
+  gap: 20px;
+  justify-content: space-between;
 }
 
 /* Bar chart styles */
@@ -196,5 +198,16 @@
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
   border: 2px solid #f8f9fa;
   border-radius: 10px;
+  flex: 1;
   /* max-height: ; */
+}
+
+/* Radar chart styles */
+.radar-chart-layout {
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+  border: 2px solid #f8f9fa;
+  border-radius: 10px;
+  flex: 1;
+  /* max-height: 400px;
+  width: 100%; */
 }
