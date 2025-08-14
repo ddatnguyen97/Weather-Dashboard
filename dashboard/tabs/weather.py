@@ -18,17 +18,17 @@ project_id = os.getenv('BQ_PROJECT_ID')
 def layout():
     return html.Div([
         dcc.Store(id='stored-date', data=None),
-        html.Div(id='weather-cards-container', className='weather-card-row'),
+        html.Div(id='message-container', children="Please select a date to view the weather data.", className='placeholder-text'),
+        html.Div(id='weather-cards-container'),
         html.Div(id='weather-charts-container'),
-        # html.Div(id='weather-radar-chart-container', className='chart-row')
     ], className='weather-layout')
 
 
 @callback(
     Output('weather-cards-container', 'children'),
     Output('weather-charts-container', 'children'),
-    # Output('weather-radar-chart-container', 'children'),
     Output('stored-date', 'data'),
+    Output('message-container', 'children'),
     Input('global-date-picker', 'date'),
     State('stored-date', 'data'),
     prevent_initial_call=True
@@ -49,23 +49,23 @@ def update_weather_layout(selected_date, stored_date):
             dbc.Col(create_weather_card(row['date'], 'overall_weather', row))
             for _, row in weekly_data.iterrows()
         ]
-        cards_layout = dbc.Row(cards)
+        cards_layout = dbc.Row(cards, className='weather-card-row')
 
         y_axis = weekly_data['precipitation']
         x_axis = weekly_data['date']
-        figure = create_bar_chart(weekly_data, x_axis, y_axis)
+        bar_chart = create_bar_chart(weekly_data, x_axis, y_axis)
 
         theta_val = 'daily_frequent_direction'
         color_val = 'wind_speed'
-        color_continuous = 'Greens'
+        color_continuous = 'Darkmint'
         radar_chart = create_radar_chart(weekly_data, theta_val, color_val, color_continuous)
 
         charts_layout = html.Div([
-            html.Div(figure, className='bar-chart-layout'),
-            html.Div(radar_chart, className='radar-chart-layout')
+            html.Div(bar_chart),
+            html.Div(radar_chart)
         ], className='chart-row')
 
-        return cards_layout, charts_layout, selected_date
+        return cards_layout, charts_layout, selected_date, ""
 
     except Exception as e:
         logging.error(f"Callback error: {e}")

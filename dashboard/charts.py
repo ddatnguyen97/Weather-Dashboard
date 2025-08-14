@@ -22,7 +22,13 @@ def create_radar_chart(df, theta_val, color_val, color_continuous):
                           theta=theta_val,
                           color=color_val,
                           color_continuous_scale=color_continuous,
-                          )
+                          hover_name="date",  
+                          hover_data={
+                            "date": True,
+                            theta_val: True,
+                            color_val: True
+                            }
+                        )
     figure.update_layout(
         title='Weekly Wind Report'
     )
