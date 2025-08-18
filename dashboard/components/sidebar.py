@@ -28,7 +28,7 @@ def create_sidebar(current_path='/home'):
             className='sidebar-logo-container'
         ),
 
-        dcc.Location(id='sidebar-url', refresh=False),
+        # dcc.Location(id='sidebar-url', refresh=False),
         dbc.Nav(
                 nav_links,
                 vertical=True,

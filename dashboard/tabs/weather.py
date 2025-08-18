@@ -18,7 +18,7 @@ project_id = os.getenv('BQ_PROJECT_ID')
 def layout():
     return html.Div([
         dcc.Store(id='stored-date', data=None),
-        html.Div(id='message-container', children="Please select a date to view the weather data.", className='placeholder-text'),
+        # html.Div(id='message-container', children="Please select a date to view the weather data.", className='placeholder-text'),
         html.Div(id='weather-cards-container'),
         html.Div(id='weather-charts-container'),
     ], className='weather-layout')
@@ -28,19 +28,17 @@ def layout():
     Output('weather-cards-container', 'children'),
     Output('weather-charts-container', 'children'),
     Output('stored-date', 'data'),
-    Output('message-container', 'children'),
+    # Output('message-container', 'children'),
     Input('global-date-picker', 'date'),
     State('stored-date', 'data'),
-    prevent_initial_call=True
+    prevent_initial_call=False
 )
 def update_weather_layout(selected_date, stored_date):
     try:
-        ctx = callback_context
-
-        if not ctx.triggered:
+        if not selected_date:
             raise PreventUpdate
 
-        if not selected_date or selected_date == stored_date:
+        if selected_date == stored_date and stored_date is not None:
             raise PreventUpdate
 
         weekly_data = get_weekly_weather_data(selected_date, table_name, project_id)
@@ -65,7 +63,7 @@ def update_weather_layout(selected_date, stored_date):
             html.Div(radar_chart)
         ], className='chart-row')
 
-        return cards_layout, charts_layout, selected_date, ""
+        return cards_layout, charts_layout, selected_date
 
     except Exception as e:
         logging.error(f"Callback error: {e}")

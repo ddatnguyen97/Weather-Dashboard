@@ -7,9 +7,11 @@ from components.sidebar import create_sidebar, PAGES
 from tabs.weather import layout as weather_layout
 from tabs.home import layout as home_layout
 
-app = Dash(__name__,
-            external_stylesheets=[dbc.themes.BOOTSTRAP],
-            suppress_callback_exceptions=True)
+app = Dash(
+    __name__,
+    external_stylesheets=[dbc.themes.BOOTSTRAP],
+    suppress_callback_exceptions=True
+    )
 
 navbar_div = create_navbar()
 sidebar_div = create_sidebar()
