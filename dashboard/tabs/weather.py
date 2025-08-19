@@ -49,9 +49,10 @@ def update_weather_layout(selected_date, stored_date):
         ]
         cards_layout = dbc.Row(cards, className='weather-card-row')
 
-        y_axis = weekly_data['precipitation']
-        x_axis = weekly_data['date']
-        bar_chart = create_bar_chart(weekly_data, x_axis, y_axis)
+        y_axis = 'precipitation'
+        x_axis = 'date'
+        color = ['#43C4E3']
+        bar_chart = create_bar_chart(weekly_data, x_axis, y_axis, color)
 
         theta_val = 'daily_frequent_direction'
         color_val = 'wind_speed'

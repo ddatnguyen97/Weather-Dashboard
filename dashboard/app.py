@@ -35,6 +35,15 @@ def update_sidebar(pathname):
     return create_sidebar(pathname or '/home')
 
 @app.callback(
+    [Output(page['id'], 'active') for path, page in PAGES.items()],
+    Input('url', 'pathname')
+)
+def highlight_active_link(pathname):
+    if pathname in [None, '/']:
+        pathname = '/home'
+    return [pathname == path for path in PAGES.keys()]
+
+@app.callback(
     Output('main-content', 'children'),
     Input('url', 'pathname')
 )
@@ -45,13 +54,6 @@ def render_page_content(pathname):
         return weather_report_div
     # elif pathname == '/aqi':
     #     return aqi_layout()
-
-@app.callback(
-    [Output(page['id'], 'active') for path, page in PAGES.items()],
-    Input('url', 'pathname')
-)
-def highlight_active_link(pathname):
-    return [pathname == path for path in PAGES.keys()]
 
 if __name__ == '__main__':
     app.run(debug=True)

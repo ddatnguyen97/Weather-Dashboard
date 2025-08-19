@@ -4,7 +4,7 @@ from dash import Input, Output, callback
 
 PAGES = {
     '/home': {'label': 'Home', 'id': 'home-link'},
-    '/weather': {'label': 'Weather Report', 'id': 'weather-link'},
+    '/weather': {'label': 'Weekly Weather', 'id': 'weather-link'},
     '/aqi': {'label': 'Air Quality', 'id': 'aqi-link'},
 }
 
