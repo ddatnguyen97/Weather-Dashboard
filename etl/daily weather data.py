@@ -7,11 +7,13 @@ import logging
 from dotenv import load_dotenv
 from google.cloud import bigquery
 from pytz import timezone
+from pathlib import Path
 
 logging.basicConfig(level=logging.INFO)
 
 load_dotenv()
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GG_CREDENTIALS')
+cred_path = Path(__file__).resolve().parent / os.getenv("GG_CREDENTIALS")
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = str(cred_path)
 
 cache_session = requests_cache.CachedSession('.cache', expire_after=3600)
 retry_session = retry(cache_session, retries=5, backoff_factor=0.2)
