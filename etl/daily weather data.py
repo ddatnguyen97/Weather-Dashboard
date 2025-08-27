@@ -12,7 +12,7 @@ from pathlib import Path
 logging.basicConfig(level=logging.INFO)
 
 load_dotenv()
-cred_path = Path(__file__).resolve().parent / os.getenv("GG_CREDENTIALS")
+cred_path = os.getenv("GG_CREDENTIALS")
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = str(cred_path)
 
 cache_session = requests_cache.CachedSession('.cache', expire_after=3600)
@@ -27,8 +27,8 @@ LOCATION = {'latitude': 10.762622, 'longitude': 106.660172}
 DATE_RANGE = {
     # 'start_date': f'{start_date}',
     # 'end_date': f'{end_date}',
-    'start_date': '2020-01-01',
-    'end_date': '2025-06-30',
+    'start_date': '2025-08-23',
+    'end_date': '2025-08-25',
 }
 
 DAILY_VARIABLES = [

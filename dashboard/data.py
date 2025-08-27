@@ -13,7 +13,7 @@ from utils import get_wind_direction_label
 logging.basicConfig(level=logging.INFO)
 
 load_dotenv()
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GG_PROJECT_CREDS')
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GG_CREDENTIALS')
 
 aggregation_query = f'''
     -- step 1: get mode weather_code per date

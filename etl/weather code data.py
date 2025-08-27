@@ -6,7 +6,7 @@ from google.cloud import bigquery as bq
 from pathlib import Path
 
 load_dotenv()
-cred_path = Path(__file__).resolve().parent / os.getenv("GG_CREDENTIALS")
+cred_path =  os.getenv("GG_CREDENTIALS")
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = str(cred_path)
 
 logging.basicConfig(level=logging.INFO)

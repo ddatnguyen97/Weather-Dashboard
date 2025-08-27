@@ -6,17 +6,20 @@ from components.navbar import create_navbar
 from components.sidebar import create_sidebar, PAGES
 from tabs.weather import layout as weather_layout
 from tabs.home import layout as home_layout
+from tabs.aqi import layout as aqi_layout
 
 app = Dash(
     __name__,
     external_stylesheets=[dbc.themes.BOOTSTRAP],
     suppress_callback_exceptions=True
     )
+server = app.server 
 
 navbar_div = create_navbar()
 sidebar_div = create_sidebar()
 weather_report_div = weather_layout()
 home_div = home_layout()
+aqi_div = aqi_layout()
 
 app.layout = html.Div([
     html.Div(id='sidebar'), 
@@ -50,10 +53,10 @@ def highlight_active_link(pathname):
 def render_page_content(pathname):
     if pathname in [None, '/', '/home']:
         return home_div
-    elif pathname == '/weather':
+    elif pathname == '/weekly-weather':
         return weather_report_div
-    # elif pathname == '/aqi':
-    #     return aqi_layout()
+    elif pathname == '/aqi':
+        return aqi_div
 
 if __name__ == '__main__':
     app.run(debug=True)

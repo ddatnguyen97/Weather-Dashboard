@@ -9,7 +9,7 @@ from google.cloud import bigquery
 from pathlib import Path
 
 load_dotenv()
-cred_path = Path(__file__).resolve().parent / os.getenv("GG_CREDENTIALS")
+cred_path = os.getenv("GG_CREDENTIALS")
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = str(cred_path)
 
 logging.basicConfig(level=logging.INFO)
@@ -24,8 +24,10 @@ end_date = (pd.Timestamp.now().normalize() - pd.DateOffset(days=1)).strftime('%Y
 API_URL = os.getenv('URL_PATH')
 LOCATION = {'latitude': 10.762622, 'longitude': 106.660172}
 DATE_RANGE = {
-    'start_date': f'{start_date}',
-    'end_date': f'{end_date}',
+    # 'start_date': f'{start_date}',
+    # 'end_date': f'{end_date}',
+    'start_date': '2025-08-23',
+    'end_date': '2025-08-25',
 }
 
 HOURLY_VARIABLES = [

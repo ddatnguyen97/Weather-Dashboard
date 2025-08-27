@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 
 load_dotenv()
-cred_path = Path(__file__).resolve().parent / os.getenv("GG_CREDENTIALS")
+cred_path = os.getenv("GG_CREDENTIALS")
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = str(cred_path)
 
 logging.basicConfig(level=logging.INFO)
@@ -60,8 +60,8 @@ def execute_pipeline(start_date, end_date, table_name, project_id):
     load_data_to_bq(trans_df, table_name, project_id)
 
 if __name__ == "__main__":
-    start_date = '2020-01-01'
-    end_date = '2025-06-30'
+    start_date = '2025-07-01'
+    end_date = '2025-12-31'
     table_name = os.getenv('DATE_TABLE')
     project_id = os.getenv('BQ_PROJECT_ID')
     execute_pipeline(start_date, end_date, table_name, project_id)

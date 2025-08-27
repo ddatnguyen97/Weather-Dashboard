@@ -4,7 +4,7 @@ import logging
 from dotenv import load_dotenv
 
 load_dotenv()
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GG_PROJECT_CREDS')
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GG_CREDENTIALS')
 
 logging.basicConfig(level=logging.INFO)
 

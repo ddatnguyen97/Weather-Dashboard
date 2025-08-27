@@ -1,10 +1,9 @@
-from dash import html, dcc
+from dash import html
 import dash_bootstrap_components as dbc
-from dash import Input, Output, callback
 
 PAGES = {
     '/home': {'label': 'Home', 'id': 'home-link'},
-    '/weather': {'label': 'Weekly Weather', 'id': 'weather-link'},
+    '/weekly-weather': {'label': 'Weekly Weather', 'id': 'weather-link'},
     '/aqi': {'label': 'Air Quality', 'id': 'aqi-link'},
 }
 
@@ -28,7 +27,6 @@ def create_sidebar(current_path='/home'):
             className='sidebar-logo-container'
         ),
 
-        # dcc.Location(id='sidebar-url', refresh=False),
         dbc.Nav(
                 nav_links,
                 vertical=True,
