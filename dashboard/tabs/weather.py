@@ -67,4 +67,8 @@ def update_weather_layout(selected_date, stored_date):
 
     except Exception as e:
         logging.error(f"Callback error: {e}")
-        return html.Div("Failed to update cards."), html.Div("Failed to load chart.")
+        return (
+        html.Div("Failed to update cards."),
+        html.Div("Failed to load chart."),
+        stored_date 
+        )
