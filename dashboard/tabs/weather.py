@@ -9,7 +9,7 @@ from dashboard.metrics import get_weekly_weather_data
 from dashboard.charts import create_bar_chart, create_radar_chart
 
 load_dotenv()
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GG_PROJECT_CREDS')
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GG_CREDENTIALS')
 
 table_name = os.getenv('AGGREGATED_TABLE')
 project_id = os.getenv('BQ_PROJECT_ID')
