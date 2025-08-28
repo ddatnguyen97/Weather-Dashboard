@@ -8,7 +8,7 @@ import pandas as pd
 import os
 import logging
 from dotenv import load_dotenv
-from utils import get_wind_direction_label
+from dashboard.utils import get_wind_direction_label
 
 logging.basicConfig(level=logging.INFO)
 

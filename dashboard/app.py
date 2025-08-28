@@ -2,11 +2,11 @@ from dash import Dash, dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 from dash import html
-from components.navbar import create_navbar
-from components.sidebar import create_sidebar, PAGES
-from tabs.weather import layout as weather_layout
-from tabs.home import layout as home_layout
-from tabs.aqi import layout as aqi_layout
+from dashboard.components.navbar import create_navbar
+from dashboard.components.sidebar import create_sidebar, PAGES
+from dashboard.tabs.weather import layout as weather_layout
+from dashboard.tabs.home import layout as home_layout
+from dashboard.tabs.aqi import layout as aqi_layout
 
 app = Dash(
     __name__,

@@ -1,7 +1,7 @@
 from dash import html
 import dash_bootstrap_components as dbc
-from components.slicer import create_date_picker
-from utils import get_date
+from dashboard.components.slicer import create_date_picker
+from dashboard.utils import get_date
 from dotenv import load_dotenv
 import os
 

@@ -1,5 +1,5 @@
 import logging
-from utils import get_week_range, get_weather_icon
+from dashboard.utils import get_week_range, get_weather_icon
 import pandas as pd
 import dash_bootstrap_components as dbc
 from dash import html

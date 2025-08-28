@@ -4,9 +4,9 @@ import logging
 from dotenv import load_dotenv
 import os
 from dash.exceptions import PreventUpdate
-from components.cards import create_weather_card
-from metrics import get_weekly_weather_data
-from charts import create_bar_chart, create_radar_chart
+from dashboard.components.cards import create_weather_card
+from dashboard.metrics import get_weekly_weather_data
+from dashboard.charts import create_bar_chart, create_radar_chart
 
 load_dotenv()
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GG_PROJECT_CREDS')
