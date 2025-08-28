@@ -1,7 +1,7 @@
 from google.cloud import bigquery as bq
 import pandas as pd
 import logging
-from utils import get_week_range
+from dashboard.utils import get_week_range
 
 logging.basicConfig(level=logging.INFO)
 
