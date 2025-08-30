@@ -20,32 +20,33 @@ GA_MEASUREMENT_ID = os.getenv("GA_MEASUREMENT_ID")
 
 app.index_string = """
 <!DOCTYPE html>
-<html>
-    <head>
-        {%metas%}
-        <title>Dashboard</title>
-        {%favicon%}
-        {%css%}
+<html lang="en">
+<head>
+    {%metas%}
+    <title>Dashboard</title>
+    {%favicon%}
+    {%css%}
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SBGP0H0LEN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-SBGP0H0LEN"></script>
-        {% raw %}
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-SBGP0H0LEN');
-        </script>
-        {% endraw %}
-    </head>
-    <body>
-        {%app_entry%}
-        <footer>
-            {%config%}
-            {%scripts%}
-            {%renderer%}
-        </footer>
-    </body>
+      // Replace with your GA4 measurement ID
+      gtag('config', 'G-SBGP0H0LEN');
+    </script>
+</head>
+<body>
+    {%app_entry%}
+    
+    <footer>
+        {%config%}
+        {%scripts%}
+        {%renderer%}
+    </footer>
+</body>
 </html>
 """
 
