@@ -7,6 +7,7 @@ from dashboard.components.sidebar import create_sidebar, PAGES
 from dashboard.tabs.weather import layout as weather_layout
 from dashboard.tabs.home import layout as home_layout
 from dashboard.tabs.aqi import layout as aqi_layout
+import os
 
 app = Dash(
     __name__,
@@ -14,6 +15,39 @@ app = Dash(
     suppress_callback_exceptions=True
     )
 server = app.server 
+
+GA_MEASUREMENT_ID = os.getenv("GA_MEASUREMENT_ID")
+
+app.index_string = """
+<!DOCTYPE html>
+<html>
+    <head>
+        {%metas%}
+        <title>Dashboard</title>
+        {%favicon%}
+        {%css%}
+
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-SBGP0H0LEN"></script>
+        {% raw %}
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-SBGP0H0LEN');
+        </script>
+        {% endraw %}
+    </head>
+    <body>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </footer>
+    </body>
+</html>
+"""
 
 navbar_div = create_navbar()
 sidebar_div = create_sidebar()
