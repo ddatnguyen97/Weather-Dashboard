@@ -1,6 +1,6 @@
 from dash import Dash, dcc
 import dash_bootstrap_components as dbc
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 from dash import html
 from dashboard.components.navbar import create_navbar
 from dashboard.components.sidebar import create_sidebar, PAGES
@@ -29,14 +29,6 @@ app.index_string = """
     
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SBGP0H0LEN"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      // Replace with your GA4 measurement ID
-      gtag('config', 'G-SBGP0H0LEN');
-    </script>
 </head>
 <body>
     {%app_entry%}
@@ -92,6 +84,17 @@ def render_page_content(pathname):
         return weather_report_div
     elif pathname == '/aqi':
         return aqi_div
+
+@app.callback(
+    Output('main-content', 'children'),
+    Input('filter-btn', 'n_clicks'),
+    State('filter-dropdown', 'value'),
+    prevent_initial_call=True
+)
+def log_filter_click(n, value):
+    return html.Div([
+        html.Script(f"pushFilterEvent('{value}');")
+    ])
 
 if __name__ == '__main__':
     app.run(debug=True)
