@@ -13,15 +13,12 @@ function pushDateFilterEvent(filterValue) {
   });
 }
 
-// document.addEventListener("DOMContentLoaded", function () {
-//   const datePicker = document.getElementById("global-date-picker");
+document.addEventListener("DOMContentLoaded", function () {
+  const datePicker = document.getElementById("global-date-picker");
 
-//   if (container) {
-//     const input = container.querySelector("input");
-//     if (input) {
-//       input.addEventListener("change", function () {
-//         pushDateFilterEvent(input.value);
-//       });
-//     }
-//   }
-// });
+  if (datePicker) {
+    datePicker.addEventListener("change", function () {
+      pushDateFilterEvent(datePicker.value);
+    });
+  }
+});
