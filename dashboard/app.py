@@ -8,6 +8,7 @@ from dashboard.tabs.weather import layout as weather_layout
 from dashboard.tabs.home import layout as home_layout
 from dashboard.tabs.aqi import layout as aqi_layout
 import os
+import uuid
 
 app = Dash(
     __name__,
@@ -52,7 +53,8 @@ app.layout = html.Div([
     html.Div(id='sidebar'), 
     html.Div([
         navbar_div,
-        html.Div(id='main-content', className='dashboard-container')
+        html.Div(id='main-content', className='dashboard-container'),
+        html.Div(id='filter-event-div', style={'display': 'none'}) # hidden div
     ], className='main-area'),
     dcc.Location(id='url', refresh=False)
 ], className='app-container')
@@ -85,16 +87,17 @@ def render_page_content(pathname):
     elif pathname == '/aqi':
         return aqi_div
 
-# @app.callback(
-#     Output('main-content', 'children'),
-#     Input('filter-btn', 'n_clicks'),
-#     State('filter-dropdown', 'value'),
-#     prevent_initial_call=True
-# )
-# def log_filter_click(n, value):
-#     return html.Div([
-#         html.Script(f"pushFilterEvent('{value}');")
-#     ])
+@app.callback(
+    Output('filter-event-div', 'children'),
+    Input('date-filter-dropdown', 'value'),
+    prevent_initial_call=True
+)
+def log_filter_change(filter_value):
+    unique_id = str(uuid.uuid4())
+    return html.Script(
+        f"pushDateFilterEvent('{filter_value}');",
+        id=f"script-{unique_id}"
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)
