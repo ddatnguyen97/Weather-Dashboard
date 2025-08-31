@@ -12,3 +12,16 @@ function pushDateFilterEvent(filterValue) {
     filter_value: filterValue,
   });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const datePicker = document.getElementById("global-date-picker");
+
+  if (container) {
+    const input = container.querySelector("input");
+    if (input) {
+      input.addEventListener("change", function () {
+        pushDateFilterEvent(input.value);
+      });
+    }
+  }
+});

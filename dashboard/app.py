@@ -85,16 +85,16 @@ def render_page_content(pathname):
     elif pathname == '/aqi':
         return aqi_div
 
-@app.callback(
-    Output('main-content', 'children'),
-    Input('filter-btn', 'n_clicks'),
-    State('filter-dropdown', 'value'),
-    prevent_initial_call=True
-)
-def log_filter_click(n, value):
-    return html.Div([
-        html.Script(f"pushFilterEvent('{value}');")
-    ])
+# @app.callback(
+#     Output('main-content', 'children'),
+#     Input('filter-btn', 'n_clicks'),
+#     State('filter-dropdown', 'value'),
+#     prevent_initial_call=True
+# )
+# def log_filter_click(n, value):
+#     return html.Div([
+#         html.Script(f"pushFilterEvent('{value}');")
+#     ])
 
 if __name__ == '__main__':
     app.run(debug=True)
