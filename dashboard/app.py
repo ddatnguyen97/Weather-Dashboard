@@ -26,7 +26,7 @@ app.index_string = """
     <title>Dashboard</title>
     {%favicon%}
     {%css%}
-    <script src="/assets/events.js"></script>
+    
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SBGP0H0LEN"></script>
 </head>
