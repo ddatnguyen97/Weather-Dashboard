@@ -1,4 +1,3 @@
-window.dataLayer = window.dataLayer || [];
 // function gtag() {
 //   dataLayer.push(arguments);
 // }
@@ -9,11 +8,12 @@ window.dataLayer = window.dataLayer || [];
 // });
 
 function pushDateFilterEvent(filterValue) {
-  console.log("Pushing to dataLayer:", filterValue);
-  dataLayer.push({
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
     event: "click_date_filter_btn",
     filter_value: filterValue,
   });
+  console.log("Pushed event:", filterValue);
 }
 
 function observeDateInputChange() {
