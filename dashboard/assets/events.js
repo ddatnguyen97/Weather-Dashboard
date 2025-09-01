@@ -24,11 +24,14 @@ function pushDateFilterEvent(filterValue) {
 // });
 
 document.addEventListener("DOMContentLoaded", function () {
-  const dateInput = document.getElementById("date");
+  const dateInput = document.querySelector("#global-date-picker input");
 
   if (dateInput) {
     dateInput.addEventListener("change", function () {
+      console.log("Date selected:", dateInput.value);
       pushDateFilterEvent(dateInput.value);
     });
+  } else {
+    console.warn("Date input not found inside #global-date-picker");
   }
 });
