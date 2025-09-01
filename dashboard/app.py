@@ -1,6 +1,6 @@
 from dash import Dash, dcc
 import dash_bootstrap_components as dbc
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output
 from dash import html
 from dashboard.components.navbar import create_navbar
 from dashboard.components.sidebar import create_sidebar, PAGES
@@ -8,7 +8,6 @@ from dashboard.tabs.weather import layout as weather_layout
 from dashboard.tabs.home import layout as home_layout
 from dashboard.tabs.aqi import layout as aqi_layout
 import os
-import uuid
 
 app = Dash(
     __name__,
@@ -27,7 +26,7 @@ app.index_string = """
     <title>Dashboard</title>
     {%favicon%}
     {%css%}
-    
+    <script src="/assets/events.js"></script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SBGP0H0LEN"></script>
 </head>
@@ -54,7 +53,7 @@ app.layout = html.Div([
     html.Div([
         navbar_div,
         html.Div(id='main-content', className='dashboard-container'),
-        html.Div(id='filter-event-div', style={'display': 'none'}) # hidden div
+        # html.Div(id='filter-event-div', style={'display': 'none'})
     ], className='main-area'),
     dcc.Location(id='url', refresh=False)
 ], className='app-container')
