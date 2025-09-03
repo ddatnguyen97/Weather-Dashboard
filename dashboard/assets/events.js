@@ -1,56 +1,40 @@
-// function gtag() {
-//   dataLayer.push(arguments);
-// }
+(function () {
+  const SELECTOR = "#global-date-picker input";
+  let lastValue = null;
 
-// window.addEventListener("load", function () {
-//   gtag("js", new Date());
-//   gtag("config", "G-SBGP0H0LEN");
-// });
+  function pushEvent(value) {
+    if (value === lastValue) return;
+    lastValue = value;
 
-function pushDateFilterEvent(filterValue) {
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({
-    event: "click_date_filter_btn",
-    filter_value: filterValue,
-  });
-  console.log("Pushed event:", filterValue);
-}
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "click_date_filter_btn",
+      filter_value: value,
+      debug_mode: true,
+    });
 
-function observeDateInputChange() {
-  const dateInput = document.querySelector("#global-date-picker input");
-
-  if (!dateInput) {
-    console.warn("Date input not found, retrying...");
-    setTimeout(observeDateInputChange, 500);
-    return;
+    console.log("Event pushed:", value);
   }
 
-  let lastValue = dateInput.value;
+  function initObserver(input) {
+    input.addEventListener("input", () => pushEvent(input.value));
 
-  ["change", "input"].forEach((evt) =>
-    dateInput.addEventListener(evt, () => {
-      if (dateInput.value !== lastValue) {
-        lastValue = dateInput.value;
-        console.log("Date changed via event:", lastValue);
-        pushDateFilterEvent(lastValue);
-      }
-    })
-  );
+    new MutationObserver(() => pushEvent(input.value)).observe(input, {
+      attributes: true,
+      attributeFilter: ["value"],
+    });
 
-  const observer = new MutationObserver(() => {
-    if (dateInput.value !== lastValue) {
-      lastValue = dateInput.value;
-      console.log("Date changed via mutation:", lastValue);
-      pushDateFilterEvent(lastValue);
+    console.log("Date input tracking initialized");
+  }
+
+  function waitForInput() {
+    const input = document.querySelector(SELECTOR);
+    if (input) {
+      initObserver(input);
+    } else {
+      setTimeout(waitForInput, 300);
     }
-  });
+  }
 
-  observer.observe(dateInput, {
-    attributes: true,
-    attributeFilter: ["value"],
-  });
-
-  console.log("Observer + event listeners attached");
-}
-
-document.addEventListener("DOMContentLoaded", observeDateInputChange);
+  document.addEventListener("DOMContentLoaded", waitForInput);
+})();
