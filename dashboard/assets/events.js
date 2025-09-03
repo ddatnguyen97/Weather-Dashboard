@@ -1,10 +1,11 @@
 (function () {
   const SELECTOR = "#global-date-picker input";
-  let lastValue = null;
 
-  function pushEvent(value) {
-    if (!value || value === lastValue) return;
-    lastValue = value;
+  function pushEvent(input) {
+    const value = input.value;
+    if (!value || input._lastPushed === value) return;
+
+    input._lastPushed = value;
 
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
@@ -16,8 +17,12 @@
     console.log("Event pushed:", value);
   }
 
-  function initObserver(input) {
-    new MutationObserver(() => pushEvent(input.value)).observe(input, {
+  function initTracking(input) {
+    // Prefer "change" for date pickers (fires once per selection)
+    input.addEventListener("change", () => pushEvent(input));
+
+    // As a fallback, observer in case the picker updates value silently
+    new MutationObserver(() => pushEvent(input)).observe(input, {
       attributes: true,
       attributeFilter: ["value"],
     });
@@ -28,7 +33,7 @@
   function waitForInput() {
     const input = document.querySelector(SELECTOR);
     if (input) {
-      initObserver(input);
+      initTracking(input);
     } else {
       setTimeout(waitForInput, 300);
     }
