@@ -3,7 +3,7 @@
   let lastValue = null;
 
   function pushEvent(value) {
-    if (value === lastValue) return;
+    if (!value || value === lastValue) return;
     lastValue = value;
 
     window.dataLayer = window.dataLayer || [];
@@ -17,14 +17,12 @@
   }
 
   function initObserver(input) {
-    input.addEventListener("input", () => pushEvent(input.value));
-
     new MutationObserver(() => pushEvent(input.value)).observe(input, {
       attributes: true,
       attributeFilter: ["value"],
     });
 
-    console.log("Date input tracking initialized");
+    console.log("Date picker tracking initialized");
   }
 
   function waitForInput() {
