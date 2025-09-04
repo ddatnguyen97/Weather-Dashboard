@@ -58,9 +58,9 @@ def update_weather_layout(selected_date, stored_date):
         color_continuous = 'Darkmint'
         radar_chart = create_radar_chart(weekly_data, theta_val, color_val, color_continuous)
 
-        charts_layout = html.Div([
-            html.Div(bar_chart),
-            html.Div(radar_chart)
+        charts_layout = dbc.Row([
+            dbc.Col(bar_chart),
+            dbc.Col(radar_chart)
         ], className='chart-row')
 
         return cards_layout, charts_layout, selected_date

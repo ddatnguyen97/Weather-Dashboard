@@ -96,17 +96,5 @@ def render_page_content(pathname):
     elif pathname == '/aqi':
         return aqi_div
 
-# @app.callback(
-#     Output('filter-event-div', 'children'),
-#     Input('date-filter-dropdown', 'value'),
-#     prevent_initial_call=True
-# )
-# def log_filter_change(filter_value):
-#     unique_id = str(uuid.uuid4())
-#     return html.Script(
-#         f"pushDateFilterEvent('{filter_value}');",
-#         id=f"script-{unique_id}"
-#     )
-
 if __name__ == '__main__':
     app.run(debug=True)

@@ -15,7 +15,7 @@ def create_weather_card(date, col, data_row=None):
     icon = get_weather_icon(description)
 
     return dbc.Card([
-        html.Div(f"{data_row['weekday']} - {date}", className='card-header'),
+        html.P(f"{data_row['weekday']} - {date}", className='card-header'),
         dbc.CardBody([
             html.Img(src=f'assets/icons/{icon}', className='card-icon'),
             html.P(f"{data_row['overall_weather']}", className='card-content'),
