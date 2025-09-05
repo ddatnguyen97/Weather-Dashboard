@@ -64,16 +64,19 @@ def create_bar_chart(df, x, y, color_discrete_sequence):
     )
 
 
-def create_radar_chart(df, theta_val, color_val, color_continuous):
+def create_radar_chart(df, radial, theta_val, color_val, color_continuous, category_order_val, hover_val):
+    DIRECTIONS = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
     fig = px.bar_polar(
         df,
-        r=None,
+        r=radial,
         theta=theta_val,
         color=color_val,
         color_continuous_scale=color_continuous,
-        hover_name="date",
+        category_orders={category_order_val: DIRECTIONS},
+        hover_name=hover_val,
         hover_data={
-            "date": True,
+            hover_val: True,
+            radial: True,
             theta_val: True,
             color_val: True
         }

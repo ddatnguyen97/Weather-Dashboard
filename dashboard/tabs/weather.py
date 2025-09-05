@@ -53,10 +53,13 @@ def update_weather_layout(selected_date, stored_date):
         color = ['#43C4E3']
         bar_chart = create_bar_chart(weekly_data, x_axis, y_axis, color)
 
+        r = 'wind_speed'
         theta_val = 'daily_frequent_direction'
-        color_val = 'wind_speed'
+        color_val = 'wind_gusts'
         color_continuous = 'Darkmint'
-        radar_chart = create_radar_chart(weekly_data, theta_val, color_val, color_continuous)
+        category_order_val = 'daily_frequent_direction'
+        hover_val = 'date'
+        radar_chart = create_radar_chart(weekly_data, r, theta_val, color_val, color_continuous, category_order_val, hover_val)
 
         charts_layout = dbc.Row([
             dbc.Col(bar_chart),
