@@ -66,4 +66,3 @@ def get_weekly_weather_data(selected_date, table_name, project_id):
         logging.error(f'Error fetching weekly weather data: {e}')
         return None
     
-    
