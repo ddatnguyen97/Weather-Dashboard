@@ -16,6 +16,14 @@ project_id = os.getenv('BQ_PROJECT_ID')
 
 def layout():
     return html.Div([
-        dcc.Store(id='stored-date', data=None),
-        
+        # dcc.Store(id='stored-date', data=None),
+        html.H2('This function is under construction. Please check back later!')
     ], className='weather-layout')
+
+# @callback(
+#     Output('weather-information-container', 'children'),
+#     State('stored-date', 'data'),
+#     prevent_initial_call=False
+# )
+# def update_daily_weather_layout(stored_date):
+    

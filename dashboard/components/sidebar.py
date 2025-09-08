@@ -3,6 +3,7 @@ import dash_bootstrap_components as dbc
 
 PAGES = {
     '/home': {'label': 'Home', 'id': 'home-link'},
+    '/daily-weather': {'label': 'Daily Weather', 'id': 'daily-link'},
     '/weekly-weather': {'label': 'Weekly Weather', 'id': 'weather-link'},
     '/aqi': {'label': 'Air Quality', 'id': 'aqi-link'},
 }

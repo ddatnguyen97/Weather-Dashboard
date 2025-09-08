@@ -5,6 +5,7 @@ from dash import html
 from dashboard.components.navbar import create_navbar
 from dashboard.components.sidebar import create_sidebar, PAGES
 from dashboard.tabs.weekly_weather import layout as weather_layout
+from dashboard.tabs.daily_weather import layout as daily_weather_layout
 from dashboard.tabs.home import layout as home_layout
 from dashboard.tabs.aqi import layout as aqi_layout
 import os
@@ -54,7 +55,8 @@ app.index_string = """
 
 navbar_div = create_navbar()
 sidebar_div = create_sidebar()
-weather_report_div = weather_layout()
+weekly_weather_div = weather_layout()
+daily_weather_div = daily_weather_layout()
 home_div = home_layout()
 aqi_div = aqi_layout()
 
@@ -91,8 +93,10 @@ def highlight_active_link(pathname):
 def render_page_content(pathname):
     if pathname in [None, '/', '/home']:
         return home_div
+    elif pathname == '/daily-weather':
+        return daily_weather_div
     elif pathname == '/weekly-weather':
-        return weather_report_div
+        return weekly_weather_div
     elif pathname == '/aqi':
         return aqi_div
 

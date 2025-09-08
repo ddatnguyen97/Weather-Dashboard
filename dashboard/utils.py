@@ -16,7 +16,7 @@ def get_week_range(selected_date):
         logging.error(f'Error getting week range: {e}')
         return None, None
 
-def get_date(table_name, project_id):
+def get_max_date(table_name, project_id):
     try:
         client = bq.Client(project=project_id)
         query = f'''
@@ -29,6 +29,21 @@ def get_date(table_name, project_id):
         return df['current_date'].iloc[0]
     except Exception as e:
         logging.error(f'Error fetching current date: {e}')
+        return None
+    
+def get_min_time(table_name, project_id):
+    try:
+        client = bq.Client(project=project_id)
+        query = f'''
+            select
+                min(time) as min_hour
+            from
+                `{table_name}`
+        '''
+        df = client.query(query).to_dataframe()
+        return df['min_hour'].iloc[0]
+    except Exception as e:
+        logging.error(f'Error fetching minimum hour: {e}')
         return None
 
 def get_weather_icon(description):

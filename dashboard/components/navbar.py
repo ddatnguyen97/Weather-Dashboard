@@ -1,7 +1,7 @@
 from dash import html
 import dash_bootstrap_components as dbc
 from dashboard.components.slicer import create_date_picker
-from dashboard.utils import get_date
+from dashboard.utils import get_max_date
 from dotenv import load_dotenv
 import os
 
@@ -11,8 +11,8 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv("GG_CREDENTIALS")
 table_name = os.getenv('AGGREGATED_TABLE')
 project_id = os.getenv('BQ_PROJECT_ID')
 
-current_date = get_date(table_name, project_id)
-initial_date = get_date(table_name, project_id)
+current_date = get_max_date(table_name, project_id)
+initial_date = get_max_date(table_name, project_id)
 date_picker = create_date_picker(current_date, initial_date)
 
 def create_navbar():
