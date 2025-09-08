@@ -17,7 +17,6 @@ project_id = os.getenv('BQ_PROJECT_ID')
 def layout():
     return html.Div([
         dcc.Store(id='stored-date', data=None),
-        # html.Div(id='message-container', children="Please select a date to view the weather data.", className='placeholder-text'),
         html.Div(id='weather-cards-container'),
         html.Div(id='weather-charts-container'),
     ], className='weather-layout')
@@ -27,7 +26,6 @@ def layout():
     Output('weather-cards-container', 'children'),
     Output('weather-charts-container', 'children'),
     Output('stored-date', 'data'),
-    # Output('message-container', 'children'),
     Input('global-date-picker', 'date'),
     State('stored-date', 'data'),
     prevent_initial_call=False
