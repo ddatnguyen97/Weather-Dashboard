@@ -69,8 +69,8 @@ def get_weather_icon(description):
         return None
 
 def get_wind_direction_label(degree):
+    directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
     try:
-        directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
         return directions[int((degree + 22.5) / 45) % 8]
     except Exception as e:
         logging.error(f'Error getting wind direction label: {e}')

@@ -4,7 +4,7 @@ from dash.dependencies import Input, Output
 from dash import html
 from dashboard.components.navbar import create_navbar
 from dashboard.components.sidebar import create_sidebar, PAGES
-from dashboard.tabs.weather import layout as weather_layout
+from dashboard.tabs.weekly_weather import layout as weather_layout
 from dashboard.tabs.home import layout as home_layout
 from dashboard.tabs.aqi import layout as aqi_layout
 import os

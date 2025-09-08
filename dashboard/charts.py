@@ -1,7 +1,4 @@
 import plotly.express as px
-from dash import html, dcc
-
-import plotly.express as px
 from dash import dcc
 import dash_bootstrap_components as dbc
 
