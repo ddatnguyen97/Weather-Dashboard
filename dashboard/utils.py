@@ -46,8 +46,8 @@ def get_min_time(table_name, project_id):
         logging.error(f'Error fetching minimum hour: {e}')
         return None
 
-def get_weather_icon(description):
-    weather_icon_map = {
+def get_weather_icon(description, default='day and night.gif'):
+    icon_map = {
         'Clear sky': 'sun.gif',
         'Mainly clear': 'mainly cloud.gif',
         'Partly cloudy': 'mainly cloud.gif',
@@ -75,10 +75,10 @@ def get_weather_icon(description):
         'Snow showers: Heavy': 'snow.gif',
         'Thunderstorm: Slight': 'storm.gif',
         'Thunderstorm: Slight with hail': 'storm.gif',
-        'Thunderstorm: Violent with hail': 'storm.gif'
+        'Thunderstorm: Violent with hail': 'storm.gif',
     }
     try:
-        return weather_icon_map.get(description, 'day and night.gif')
+        return icon_map.get(description, default)
     except Exception as e:
         logging.error(f'Error getting weather icon: {e}')
         return None
@@ -97,3 +97,15 @@ def get_frequent_wind_direction(column):
     except Exception as e:
         logging.error(f'Error getting daily frequent wind direction: {e}')
         return None
+    
+def get_day_night_icon(description, default='day and night.gif'):
+    icon_map={
+        'Day': 'sun.gif',
+        'Night': 'night.gif',
+    }
+    try:
+        return icon_map.get(description, default)
+    except Exception as e:
+        logging.error(f'Error getting day night icon: {e}')
+        return None
+    

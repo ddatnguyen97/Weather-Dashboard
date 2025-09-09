@@ -4,7 +4,7 @@ import logging
 from dotenv import load_dotenv
 import os
 from dash.exceptions import PreventUpdate
-from dashboard.components.cards import create_weather_card
+from dashboard.components.cards import create_weather_card, generate_weekly_weather_cards
 from dashboard.metrics import get_weekly_weather_data
 from dashboard.charts import create_bar_chart, create_radar_chart
 
@@ -40,21 +40,19 @@ def update_weather_layout(selected_date, stored_date):
 
         weekly_data = get_weekly_weather_data(selected_date, table_name, project_id)
 
-        cards = [
-            dbc.Col(create_weather_card(row['date'], 'overall_weather', row))
-            for _, row in weekly_data.iterrows()
-        ]
-        cards_layout = dbc.Row(cards, className='weather-card-row')
+        cards = generate_weekly_weather_cards(weekly_data, selected_date, create_weather_card)
+        cards_layout = dbc.Row([dbc.Col(card) for card in cards], className='weather-card-row')
+
 
         y_axis = 'precipitation'
         x_axis = 'date'
         bar_chart_title = "Weekly Precipitation Report"
         color = ['#43C4E3']
         bar_chart = create_bar_chart(weekly_data, 
-                                     x_axis, 
-                                     y_axis, 
-                                     bar_chart_title, 
-                                     color)
+                                    x_axis, 
+                                    y_axis, 
+                                    bar_chart_title, 
+                                    color)
 
         r = 'wind_speed'
         theta_val = 'daily_frequent_direction'
@@ -64,13 +62,13 @@ def update_weather_layout(selected_date, stored_date):
         hover_val = 'date'
         radar_chart_title = "Weekly Wind Report"
         radar_chart = create_radar_chart(weekly_data,
-                                         r, 
-                                         theta_val,
-                                         color_val, 
-                                         color_continuous, 
-                                         category_order_val, 
-                                         hover_val, 
-                                         radar_chart_title)
+                                        r, 
+                                        theta_val,
+                                        color_val, 
+                                        color_continuous, 
+                                        category_order_val, 
+                                        hover_val, 
+                                        radar_chart_title)
 
         charts_layout = dbc.Row([
             dbc.Col(bar_chart),
@@ -78,7 +76,6 @@ def update_weather_layout(selected_date, stored_date):
         ], className='chart-row')
 
         return cards_layout, charts_layout, selected_date
-
     except Exception as e:
         logging.error(f"Callback error: {e}")
         return (

@@ -12,7 +12,9 @@ def create_bar_chart(df, x, y, title, color_discrete_sequence):
     fig.update_layout(
         margin=dict(l=20, r=20, t=40, b=20),
         title=title,
-        font=dict(size=12)
+        font=dict(size=12),
+        xaxis_title=None, 
+        yaxis_title=None
     )
 
     return dbc.Card(

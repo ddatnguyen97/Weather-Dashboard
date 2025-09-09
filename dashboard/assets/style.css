@@ -110,6 +110,7 @@
 
 /* .weather-card-row {
   width: 100%;
+  height: 80vh;
 } */
 
 .weather-card {
@@ -118,7 +119,7 @@
   overflow: hidden;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
   text-align: center;
-  /* height: auto; */
+  /* height: 20vh; */
 }
 
 .card-icon {
