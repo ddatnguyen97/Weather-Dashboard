@@ -1,8 +1,9 @@
 import logging
-from dashboard.utils import get_week_range, get_weather_icon, get_min_time
+from dashboard.utils import get_week_range, get_weather_icon, get_min_time, get_max_temperature
 import pandas as pd
 import dash_bootstrap_components as dbc
 from dash import html
+from datetime import datetime
 
 def create_weather_card(date_label, col, data_row=None):
     if data_row is None:
@@ -36,7 +37,6 @@ def generate_weekly_weather_cards(df, selected_date, create_card_func):
             weekday = date.strftime('%a')
             display_date = date.strftime('%b %d')
             data_row = None
-
             if df is not None and not df.empty:
                 match = df[df['date'].dt.strftime('%Y-%m-%d') == date_str]
                 if not match.empty:
@@ -44,7 +44,6 @@ def generate_weekly_weather_cards(df, selected_date, create_card_func):
 
             card = create_card_func(f"{weekday} - {display_date}", 'overall_weather', data_row)
             cards.append(card)
-
         return cards
 
     except Exception as e:
@@ -64,10 +63,6 @@ def create_weather_information_card(date_label, col, data_row=None):
     return dbc.Card([
         html.P(date_label, className='card-header'),
         dbc.CardBody([
-            # html.Img(src=f'assets/icons/{icon}', className='card-icon'),
-            # html.P(f"{data_row['overall_weather']}", className='card-content'),
-            # html.P(f"Temperature: {data_row['temperature']:.2f}°C", className='card-content'),
-            # html.P(f"Humidity: {data_row['humidity']:.2f}%", className='card-content'),
             dbc.Col(
                 html.Img(src=f'assets/icons/{icon}', className='daily-weather-icon'),
                 dbc.Row([
@@ -86,3 +81,73 @@ def create_weather_information_card(date_label, col, data_row=None):
             )
         ])
     ], className='weather-information-card')
+
+# def create_hour_picker_card(data_row=None):
+#     if data_row is None:
+#         return dbc.Card([
+#             dbc.CardBody('No Data', className='text-muted')
+#         ])
+    
+#     time_val = data_row["time"].strftime("%H:%M")
+#     return dbc.Card([
+#         dbc.CardBody([
+#             dbc.Row(
+#                 html.P(f"{time_val}", className='hour-value'),
+#             ),
+#         ])
+#     ], className='hour-picker-card')
+
+# def generate_hour_picker_card(df, create_hour_picker_func):
+#     try:
+#         df["time"] = pd.to_datetime(df["time"], errors="coerce")
+
+#         cards = []
+#         hours = [datetime.strptime(f"{h:02d}:00", "%H:%M") for h in range(24)]
+#         for hour in hours:
+#             data_row = None
+#             if df is not None and not df.empty:
+#                     match = df[df['time'].dt.hour == hour.hour]
+#                     if not match.empty:
+#                         data_row = match.iloc[0]
+
+#             cards.append(data_row)
+#         return cards
+    
+#     except Exception as e:
+#         logging.error(f'Error generating hour picker cards: {e}')
+#         return None
+    
+def create_hour_picker_card(hour_label, data_row=None):
+    if data_row is None:
+        return dbc.Card([
+            dbc.CardBody([
+                html.P(hour_label, className='hour-value text-muted'),
+            ])
+        ], className='hour-picker-card')
+    
+    return dbc.Card([
+        dbc.CardBody([
+            html.P(hour_label, className='hour-value'),
+        ])
+    ], className='hour-picker-card')
+
+def generate_hour_picker_card(df, create_hour_picker_func):
+    try:
+        df["time"] = pd.to_datetime(df["time"], errors="coerce")
+
+        cards = []
+        hours = [datetime.strptime(f"{h:02d}:00", "%H:%M") for h in range(24)]
+        for hour in hours:
+            data_row = None
+            if df is not None and not df.empty:
+                match = df[df['time'].dt.hour == hour.hour]
+                if not match.empty:
+                    data_row = match.iloc[0]
+
+            card = create_hour_picker_func(hour.strftime("%H:%M"), data_row)
+            cards.append(card)
+        return cards
+
+    except Exception as e:
+        logging.error(f'Error generating hour picker cards: {e}')
+        return None

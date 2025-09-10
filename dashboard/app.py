@@ -4,7 +4,7 @@ from dash.dependencies import Input, Output
 from dash import html
 from dashboard.components.navbar import create_navbar
 from dashboard.components.sidebar import create_sidebar, PAGES
-from dashboard.tabs.weekly_weather import layout as weather_layout
+from dashboard.tabs.weekly_weather import layout as weekly_weather_layout
 from dashboard.tabs.daily_weather import layout as daily_weather_layout
 from dashboard.tabs.home import layout as home_layout
 from dashboard.tabs.aqi import layout as aqi_layout
@@ -55,8 +55,8 @@ app.index_string = """
 
 navbar_div = create_navbar()
 sidebar_div = create_sidebar()
-weekly_weather_div = weather_layout()
-daily_weather_div = daily_weather_layout()
+weekly_weather_div = weekly_weather_layout(app)
+daily_weather_div = daily_weather_layout(app)
 home_div = home_layout()
 aqi_div = aqi_layout()
 

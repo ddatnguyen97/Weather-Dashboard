@@ -109,3 +109,16 @@ def get_day_night_icon(description, default='day and night.gif'):
         logging.error(f'Error getting day night icon: {e}')
         return None
     
+def get_min_temperature(df,date_col, temp_col):
+    try:
+        return df.groupby(date_col)[temp_col].min()
+    except Exception as e:
+        logging.error(f'Error getting min temp: {e}')
+        return None
+    
+def get_max_temperature(df,date_col, temp_col):
+    try:
+        return df.groupby(date_col)[temp_col].max()
+    except Exception as e:
+        logging.error(f'Error getting min temp: {e}')
+        return None
