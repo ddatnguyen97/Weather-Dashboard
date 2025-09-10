@@ -43,7 +43,6 @@ def update_weather_layout(selected_date, stored_date):
         cards = generate_weekly_weather_cards(weekly_data, selected_date, create_weather_card)
         cards_layout = dbc.Row([dbc.Col(card) for card in cards], className='weather-card-row')
 
-
         y_axis = 'precipitation'
         x_axis = 'date'
         bar_chart_title = "Weekly Precipitation Report"

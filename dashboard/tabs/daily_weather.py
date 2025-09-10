@@ -35,11 +35,14 @@ def update_weather_layout(selected_date, stored_date):
         if selected_date == stored_date and stored_date is not None:
             raise PreventUpdate
         
-        daily_weather = get_daily_weather_data(selected_date, table_name, project_id)
+        # daily_weather = get_daily_weather_data(selected_date, table_name, project_id)
 
-        information_card = create_weather_information_card()
+        # information_card = create_weather_information_card()
 
         # information_layout = 
+        hour_picker_layout = dbc.Row([
+            
+        ], className='hour-picker-row')
     except Exception as e:
         logging.error(f"Callback error: {e}")
         return (
