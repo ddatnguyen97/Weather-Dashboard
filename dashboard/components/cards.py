@@ -81,55 +81,39 @@ def create_weather_information_card(date_label, col, data_row=None):
             )
         ])
     ], className='weather-information-card')
-
-# def create_hour_picker_card(data_row=None):
+    
+# def create_hour_picker_card(hour_label, data_row=None):
 #     if data_row is None:
-#         return dbc.Card([
-#             dbc.CardBody('No Data', className='text-muted')
-#         ])
+#         return dbc.Card(
+#             dbc.CardBody([
+#                 html.P(hour_label, className='hour-value text-muted'),
+#             ]),
+#             id=f"hour-card-{hour_label}",   
+#             className="hour-picker-card",  
+#             n_clicks=0
+#         )
     
-#     time_val = data_row["time"].strftime("%H:%M")
-#     return dbc.Card([
+#     return dbc.Card(
 #         dbc.CardBody([
-#             dbc.Row(
-#                 html.P(f"{time_val}", className='hour-value'),
-#             ),
-#         ])
-#     ], className='hour-picker-card')
+#             html.P(hour_label, className='hour-value'),
+#         ]), 
+#         id=f"hour-card-{hour_label}",   
+#         className="hour-picker-card",  
+#         n_clicks=0
+#     )
 
-# def generate_hour_picker_card(df, create_hour_picker_func):
-#     try:
-#         df["time"] = pd.to_datetime(df["time"], errors="coerce")
-
-#         cards = []
-#         hours = [datetime.strptime(f"{h:02d}:00", "%H:%M") for h in range(24)]
-#         for hour in hours:
-#             data_row = None
-#             if df is not None and not df.empty:
-#                     match = df[df['time'].dt.hour == hour.hour]
-#                     if not match.empty:
-#                         data_row = match.iloc[0]
-
-#             cards.append(data_row)
-#         return cards
-    
-#     except Exception as e:
-#         logging.error(f'Error generating hour picker cards: {e}')
-#         return None
-    
 def create_hour_picker_card(hour_label, data_row=None):
-    if data_row is None:
-        return dbc.Card([
-            dbc.CardBody([
-                html.P(hour_label, className='hour-value text-muted'),
-            ])
-        ], className='hour-picker-card')
-    
-    return dbc.Card([
+    return dbc.Card(
         dbc.CardBody([
-            html.P(hour_label, className='hour-value'),
-        ])
-    ], className='hour-picker-card')
+            html.Div(
+                hour_label,
+                id={'type': 'hour-card', 'index': hour_label},
+                className="hour-value",
+                n_clicks=0
+            )
+        ]),
+        className="hour-picker-card"
+    )
 
 def generate_hour_picker_card(df, create_hour_picker_func):
     try:
@@ -151,3 +135,39 @@ def generate_hour_picker_card(df, create_hour_picker_func):
     except Exception as e:
         logging.error(f'Error generating hour picker cards: {e}')
         return None
+
+# def create_hour_picker_card(hour_label, data_row=None):
+#     return dbc.Card(
+#         dbc.CardBody([
+#             html.Div(hour_label, className="hour-value")
+#         ]),
+#         className="hour-picker-card"
+#     )
+
+# def generate_hour_picker_card(df, create_hour_picker_func):
+#     try:
+#         df["time"] = pd.to_datetime(df["time"], errors="coerce")
+#         cards = []
+#         hours = [datetime.strptime(f"{h:02d}:00", "%H:%M") for h in range(24)]
+#         for hour in hours:
+#             data_row = None
+#             if df is not None and not df.empty:
+#                 match = df[df['time'].dt.hour == hour.hour]
+#                 if not match.empty:
+#                     data_row = match.iloc[0]
+
+#             inner_card = create_hour_picker_func(hour.strftime("%H:%M"), data_row)
+
+#             # wrapper has pattern-matching id and n_clicks so Dash can listen to it
+#             wrapper = html.Div(
+#                 inner_card,
+#                 id={'type': 'hour-card', 'index': hour.strftime("%H:%M")},
+#                 n_clicks=0,
+#                 className='hour-picker-wrapper'
+#             )
+#             cards.append(wrapper)
+#         return cards
+
+#     except Exception as e:
+#         logging.error(f'Error generating hour picker cards: {e}')
+#         return None

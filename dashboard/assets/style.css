@@ -179,41 +179,50 @@
 }
 
 .chart-graph {
-  /* flex: 1; */
   width: 100% !important;
   height: 100% !important;
 }
 
 .hour-picker-row {
-    display: flex;
-    overflow-x: auto;
-    overflow-y: hidden;
-    gap: 8px;
-    padding: 8px;
-    max-width: 100%;
-    flex-wrap: nowrap; 
-}
-
-.hour-picker-row::-webkit-scrollbar {
-    height: 8px;          
-}
-
-.hour-picker-row::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px;
 }
 
 .hour-picker-card {
-    flex: 0 0 auto;
-    width: 50px;   
-    text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    box-sizing: border-box;  
-    white-space: nowrap;     
+  flex: 1 1 0;
+  min-width: 40px;
+  max-width: 70px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 6px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+  align-items: center;
+  height: 40px;
 }
 
 .hour-value {
   font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.hour-picker-card:hover {
+  transform: scale(1.05);
+  border-color: #999;
+}
+
+.hour-picker-card.active {
+  background: #3f5aa3;
+  color: #fff;
+  border-color: #2c447d;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
 }
