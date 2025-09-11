@@ -4,7 +4,7 @@ import logging
 from dotenv import load_dotenv
 import os
 from dash.exceptions import PreventUpdate
-from dashboard.components.cards import create_weather_information_card, generate_hour_picker_card, create_hour_picker_card
+from dashboard.components.cards import create_weather_information_card, generate_hour_picker_card, create_hour_picker_button
 from dashboard.metrics import get_daily_weather_data
 from dashboard.charts import create_bar_chart, create_radar_chart
 from dash import ALL
@@ -49,22 +49,22 @@ def register_callbacks(app):
                 logging.warning("No daily weather data found.")
                 return html.Div("No data available for selected date.")
 
-            hour_picker_cards = generate_hour_picker_card(daily_weather, create_hour_picker_card)
-            hour_cards_layout = html.Div(hour_picker_cards, className='hour-picker-row')
-            # hour_cards_layout = dbc.Row(hour_picker_cards, className='hour-picker-row')
-
-            # hours = hours.dropna().astype(int).unique()
-            # hour_picker_cards = []
-            # for hour in daily_weather['time'].dt.hour.unique():
-            #     hour_str = f"{int(hour):02d}:00"
-            #     is_active = "active" if hour_str == (selected_hour or "00:00") else ""
-            #     card = html.Div(
-            #         id={'type': 'hour-picker-card', 'index': hour_str},
-            #         children=create_hour_picker_card(hour_str),
-            #         className=f"hour-picker-card {is_active}",
-            #         n_clicks=0
-            #     )
-            #     hour_picker_cards.append(card)
+            hour_picker_cards = generate_hour_picker_card(daily_weather, create_hour_picker_button)
+            hour_cards_layout = html.Div(
+                dbc.Row(
+                    [dbc.Col(card, width="auto") for card in hour_picker_cards],
+                    className="hour-picker-row",
+                ),
+                className="hour-picker-wrapper"
+            )
+            # hour_cards_layout = html.Div(
+            #     [card for card in hour_picker_cards],
+            #     className="hour-picker-row",
+            # )
+            # hour_cards_layout = dbc.Row(
+            #     [card for card in hour_picker_cards],
+            #     className="hour-picker-row",
+            # )
 
             return hour_cards_layout
 
@@ -74,49 +74,30 @@ def register_callbacks(app):
             logging.error(f"Callback error: {e}")
             return html.Div("Failed to load information.")
 
-    # @app.callback(
-    #     Output('hour-picker-container', 'children'),
-    #     Input({'type': 'hour-picker-card', 'index': ALL}, 'n_clicks'),
-    #     State('hour-picker-container', 'children'),
-    #     prevent_initial_call=True
-    # )
-    # def highlight_selected_hour(n_clicks, cards):
-    #     if not n_clicks or all(v is None or v == 0 for v in n_clicks):
-    #         raise PreventUpdate
-
-    #     clicked_idx = max(
-    #         (i for i, v in enumerate(n_clicks) if v is not None and v > 0),
-    #         key=lambda i: n_clicks[i]
-    #     )
-
-    #     # Mark the clicked card as active by injecting CSS class
-    #     for i, card in enumerate(cards):
-    #         if 'props' in card and 'className' in card['props']:
-    #             card['props']['className'] = card['props']['className'].replace(" active", "")
-    #             if i == clicked_idx:
-    #                 card['props']['className'] += " active"
-
-    #     return cards
     @app.callback(
     Output({'type': 'hour-card', 'index': ALL}, 'className'),
     Input({'type': 'hour-card', 'index': ALL}, 'n_clicks'),
     State({'type': 'hour-card', 'index': ALL}, 'id'),
     prevent_initial_call=False
-)
+    )
     def highlight_hour(n_clicks, ids):
         if not n_clicks:
             raise PreventUpdate
 
-        # mặc định = 00:00 nếu chưa click
         if all(v == 0 or v is None for v in n_clicks):
-            return ["hour-value active" if id['index'] == "00:00" else "hour-value" for id in ids]
+            return [
+                "hour-picker-card active" if id['index'] == "00:00" else "hour-picker-card"
+                for id in ids
+            ]
 
-        # tìm card được click gần nhất
         clicked_idx = max(
             (i for i, v in enumerate(n_clicks) if v),
             key=lambda i: n_clicks[i],
         )
         selected_hour = ids[clicked_idx]['index']
 
-        # update className -> chỉ highlight cái được chọn
-        return ["hour-value active" if id['index'] == selected_hour else "hour-value" for id in ids]
+        return [
+            "hour-picker-card active" if id['index'] == selected_hour else "hour-picker-card"
+            for id in ids
+        ]
+
