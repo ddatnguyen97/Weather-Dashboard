@@ -82,11 +82,11 @@ def create_weather_information_card(date_label, col, data_row=None):
         ])
     ], className='weather-information-card')   
 
-def create_hour_picker_button(hour_label, data_row=None):
+def create_hour_picker_card(hour_label, data_row=None):
     return dbc.Button(
         hour_label,
         id={'type': 'hour-card', 'index': hour_label},
-        className="hour-picker-button",
+        className="hour-picker-card",
         n_clicks=0
     )
 

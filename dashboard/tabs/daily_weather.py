@@ -4,7 +4,7 @@ import logging
 from dotenv import load_dotenv
 import os
 from dash.exceptions import PreventUpdate
-from dashboard.components.cards import create_weather_information_card, generate_hour_picker_card, create_hour_picker_button
+from dashboard.components.cards import create_weather_information_card, generate_hour_picker_card, create_hour_picker_card
 from dashboard.metrics import get_daily_weather_data
 from dashboard.charts import create_bar_chart, create_radar_chart
 from dash import ALL
@@ -49,18 +49,15 @@ def register_callbacks(app):
                 logging.warning("No daily weather data found.")
                 return html.Div("No data available for selected date.")
 
-            hour_picker_cards = generate_hour_picker_card(daily_weather, create_hour_picker_button)
+            hour_picker_cards = generate_hour_picker_card(daily_weather, create_hour_picker_card)
+            # hour_cards_layout = dbc.Row(
+            #         [dbc.Col(card) for card in hour_picker_cards],
+            #         className="hour-picker-row",
+            #     )
             hour_cards_layout = html.Div(
-                dbc.Row(
-                    [dbc.Col(card, width="auto") for card in hour_picker_cards],
-                    className="hour-picker-row",
-                ),
-                className="hour-picker-wrapper"
+                hour_picker_cards,
+                className="hour-picker-row"
             )
-            # hour_cards_layout = html.Div(
-            #     [card for card in hour_picker_cards],
-            #     className="hour-picker-row",
-            # )
             # hour_cards_layout = dbc.Row(
             #     [card for card in hour_picker_cards],
             #     className="hour-picker-row",
