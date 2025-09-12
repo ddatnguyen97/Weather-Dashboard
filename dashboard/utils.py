@@ -31,17 +31,23 @@ def get_max_date(table_name, project_id):
         logging.error(f'Error fetching current date: {e}')
         return None
     
-def get_min_time(table_name, project_id):
+def get_min_time_of_day(table_name, selected_date, project_id):
     try:
         client = bq.Client(project=project_id)
         query = f'''
             select
+                date,
                 min(time) as min_hour
             from
                 `{table_name}`
+            where
+                date = '{selected_date}'
+            group by 
+                date
         '''
         df = client.query(query).to_dataframe()
-        return df['min_hour'].iloc[0]
+        min_time = df['min_hour'].iloc[0]
+        return min_time.strftime("%H:00")
     except Exception as e:
         logging.error(f'Error fetching minimum hour: {e}')
         return None
@@ -99,7 +105,7 @@ def get_frequent_wind_direction(column):
         return None
     
 def get_day_night_icon(description, default='day and night.gif'):
-    icon_map={
+    icon_map = {
         'Day': 'sun.gif',
         'Night': 'night.gif',
     }
@@ -108,6 +114,12 @@ def get_day_night_icon(description, default='day and night.gif'):
     except Exception as e:
         logging.error(f'Error getting day night icon: {e}')
         return None
+    
+def get_temperature_icon(min_temp, max_temp, default='day and night.gif'):
+    icon_map = {
+        '{min_temp}': 'cold.gif',
+        '{max_temp}': 'hot.gif',
+    }
     
 def get_min_temperature(df,date_col, temp_col):
     try:

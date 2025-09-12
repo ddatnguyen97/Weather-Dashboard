@@ -1,5 +1,5 @@
 import logging
-from dashboard.utils import get_week_range, get_weather_icon, get_min_time, get_max_temperature
+from dashboard.utils import get_week_range, get_weather_icon, get_min_time_of_day, get_max_temperature
 import pandas as pd
 import dash_bootstrap_components as dbc
 from dash import html
@@ -110,3 +110,15 @@ def generate_hour_picker_card(df, create_hour_picker_func):
     except Exception as e:
         logging.error(f'Error generating hour picker cards: {e}')
         return None
+
+# def create_sun_time_card():
+#     try:
+#         return dbc.Row(
+#             dbc.Col(
+#                 html.Img(src=f'assets/icons/{icon}', className='daily-information-icon')
+#             ),
+#             dbc.Col()
+#         )
+#     except Exception as e:
+#         logging.error(f'Error generating hour picker cards: {e}')
+#         return None
