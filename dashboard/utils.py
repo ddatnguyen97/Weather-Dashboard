@@ -115,22 +115,64 @@ def get_day_night_icon(description, default='day and night.gif'):
         logging.error(f'Error getting day night icon: {e}')
         return None
     
-def get_temperature_icon(min_temp, max_temp, default='day and night.gif'):
-    icon_map = {
-        '{min_temp}': 'cold.gif',
-        '{max_temp}': 'hot.gif',
-    }
-    
-def get_min_temperature(df,date_col, temp_col):
+# def get_temperature_icon(min_temp, max_temp, default='day and night.gif'):
+#     try:
+#         max_temp = f'{max_temp:.2f}'
+#         min_temp = f'{min_temp:.2f}'
+#         if max_temp:
+#             return 'hot.gif'
+#         elif min_temp:
+#             return 'cold.gif'
+#         else:
+#             return default
+#     except Exception as e:
+#         logging.error(f'Error getting temperature icon: {e}')
+#         return None
+
+def get_min_temperature(df, date_col, temp_col):
     try:
         return df.groupby(date_col)[temp_col].min()
     except Exception as e:
         logging.error(f'Error getting min temp: {e}')
         return None
     
-def get_max_temperature(df,date_col, temp_col):
+def get_max_temperature(df, date_col, temp_col):
     try:
         return df.groupby(date_col)[temp_col].max()
     except Exception as e:
-        logging.error(f'Error getting min temp: {e}')
+        logging.error(f'Error getting max temp: {e}')
+        return None
+    
+def get_sun_times(df, table_name, selected_date, project_id):
+    try:
+        client = bq.Client(project=project_id)
+        query = f'''
+            select
+                date,
+                max(sunset) as sunset,
+                max(sunrise) as sunrise
+            from
+                `{table_name}`
+            where
+                date = '{selected_date}'
+            group by 
+                date
+        '''
+        df = client.query(query).to_dataframe()
+        sunrise_time = pd.to_datetime(df['sunrise'].iloc[0])
+        sunset_time = pd.to_datetime(df['sunset'].iloc[0])
+        return sunrise_time.strftime("%H:%M"), sunset_time.strftime("%H:%M")
+    except Exception as e:
+        logging.error(f'Error fetching sun times: {e}')
+        return None
+    
+def get_sun_times_icon(kind, default="day_and_night.gif"):
+    icon_map = {
+        "sunrise": "sunrise.png",
+        "sunset": "sunsets.png"
+    }
+    try:
+        return icon_map.get(kind, default)
+    except Exception as e:
+        logging.error(f'Error getting sun times icon: {e}')
         return None

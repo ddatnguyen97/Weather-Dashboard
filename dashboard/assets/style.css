@@ -190,14 +190,33 @@
 
 .hour-picker {
   width: 200px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
 }
 
 .hour-picker .Select-input input {
-    font-size: 16px;
-    font-weight: 600;
-    color: #00a99d;
+  font-size: 16px;
+  font-weight: 600;
+  color: #00a99d;
 }
 
-.hour-picker:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.sun-times-card {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+  background-color: #fff;
+}
+
+.sun-times-icon {
+  height: 35px;
+  width: 35px;
+}
+
+.sun-times-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #00a99d;
 }

@@ -1,5 +1,5 @@
 import logging
-from dashboard.utils import get_week_range, get_weather_icon, get_min_time_of_day, get_max_temperature
+from dashboard.utils import get_week_range, get_weather_icon, get_sun_times, get_sun_times_icon
 import pandas as pd
 import dash_bootstrap_components as dbc
 from dash import html
@@ -111,14 +111,25 @@ def generate_hour_picker_card(df, create_hour_picker_func):
         logging.error(f'Error generating hour picker cards: {e}')
         return None
 
-# def create_sun_time_card():
-#     try:
-#         return dbc.Row(
-#             dbc.Col(
-#                 html.Img(src=f'assets/icons/{icon}', className='daily-information-icon')
-#             ),
-#             dbc.Col()
-#         )
-#     except Exception as e:
-#         logging.error(f'Error generating hour picker cards: {e}')
-#         return None
+def create_sun_times_card(df, selected_date, project_id, table_name):
+    try:
+        sunrise = get_sun_times(df, table_name, selected_date, project_id)[0]
+        sunset = get_sun_times(df, table_name, selected_date, project_id)[1]
+        return dbc.Row([
+            dbc.Col([
+                    html.Img(src=f'assets/icons/{get_sun_times_icon("sunrise")}', 
+                    className='sun-times-icon'),
+                    html.P(f"Sunrise: {sunrise}", 
+                    className='sun-times-text')
+                ]),
+            dbc.Col([
+                    html.Img(src=f'assets/icons/{get_sun_times_icon("sunset")}', 
+                    className='sun-times-icon'),
+                    html.P(f"Sunset: {sunset}", 
+                    className='sun-times-text')
+                ])
+            ], className='sun-times-card')
+    except Exception as e:
+        logging.error(f'Error generating hour picker cards: {e}')
+        return None
+

@@ -4,9 +4,10 @@ import logging
 from dotenv import load_dotenv
 import os
 from dash.exceptions import PreventUpdate
-from dashboard.components.cards import create_weather_information_card, generate_hour_picker_card, create_hour_picker_card
 from dashboard.metrics import get_daily_weather_data
-from dashboard.charts import create_bar_chart, create_radar_chart
+from dashboard.utils import get_max_date, get_min_time_of_day
+from dashboard.components.slicer import create_hour_picker
+from dashboard.components.cards import create_sun_times_card
 from dash import ALL
 import dash
 
@@ -44,21 +45,33 @@ def register_callbacks(app):
                 raise PreventUpdate
 
             daily_weather = get_daily_weather_data(selected_date, table_name, project_id)
+            initial_date = get_max_date(table_name, project_id)
+            initial_hour = get_min_time_of_day(table_name, initial_date, project_id)
+            hour_picker = create_hour_picker(initial_hour)
+            sun_times_card = create_sun_times_card(daily_weather, selected_date, project_id, table_name)
 
             if daily_weather is None or daily_weather.empty:
                 logging.warning("No daily weather data found.")
                 return html.Div("No data available for selected date.")
 
-            hour_picker_cards = generate_hour_picker_card(daily_weather, create_hour_picker_card)
-            hour_cards_layout = dbc.Row(
-                    [dbc.Col(card) for card in hour_picker_cards],
-                    className="hour-picker-row",
+            # hour_cards_layout = html.Div([
+            #     sun_times_card,
+            #     hour_picker,
+            # ], className="hour-picker-row")
+            # return hour_cards_layout
+        
+            hour_cards_layout = dbc.Row([
+                dbc.Col(
+                    sun_times_card,
+                    width=9,
+                    className="sun-times-container"
+                ),
+                dbc.Col(
+                    hour_picker,
+                    width=3,
+                    className="hour-picker-row"
                 )
-            hour_cards_layout = html.Div(
-                hour_picker_cards,
-                className="hour-picker-row"
-            )
-
+            ], )
             return hour_cards_layout
 
         except PreventUpdate:
@@ -66,31 +79,3 @@ def register_callbacks(app):
         except Exception as e:
             logging.error(f"Callback error: {e}")
             return html.Div("Failed to load information.")
-
-    @app.callback(
-    Output({'type': 'hour-card', 'index': ALL}, 'className'),
-    Input({'type': 'hour-card', 'index': ALL}, 'n_clicks'),
-    State({'type': 'hour-card', 'index': ALL}, 'id'),
-    prevent_initial_call=False
-    )
-    def highlight_hour(n_clicks, ids):
-        if not n_clicks:
-            raise PreventUpdate
-
-        if all(v == 0 or v is None for v in n_clicks):
-            return [
-                "hour-picker-card active" if id['index'] == "00:00" else "hour-picker-card"
-                for id in ids
-            ]
-
-        clicked_idx = max(
-            (i for i, v in enumerate(n_clicks) if v),
-            key=lambda i: n_clicks[i],
-        )
-        selected_hour = ids[clicked_idx]['index']
-
-        return [
-            "hour-picker-card active" if id['index'] == selected_hour else "hour-picker-card"
-            for id in ids
-        ]
-
