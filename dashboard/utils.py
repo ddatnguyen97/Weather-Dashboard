@@ -176,3 +176,37 @@ def get_sun_times_icon(kind, default="day_and_night.gif"):
     except Exception as e:
         logging.error(f'Error getting sun times icon: {e}')
         return None
+    
+def get_min_max_temperature(df, table_name, selected_date, project_id):
+    try:
+        client = bq.Client(project=project_id)
+        query = f'''
+            select
+                date,
+                min(temperature_2m) as min_temp,
+                max(temperature_2m) as max_temp
+            from
+                `{table_name}`
+            where
+                date = '{selected_date}'
+            group by 
+                date
+        '''
+        df = client.query(query).to_dataframe()
+        min_temp = df['min_temp'].iloc[0]
+        max_temp = df['max_temp'].iloc[0]
+        return min_temp, max_temp
+    except Exception as e:
+        logging.error(f'Error fetching min and max temperature: {e}')
+        return None, None
+    
+def get_min_max_temperature_icon(temperature, default='day and night.gif'):
+    icon_map = {
+        "min_temp": "cold.gif",
+        "max_temp": "hot.gif"
+    }
+    try:
+        return icon_map.get(temperature, default)
+    except Exception as e:
+        logging.error(f'Error getting temperature icon: {e}')
+        return None

@@ -7,7 +7,7 @@ from dash.exceptions import PreventUpdate
 from dashboard.metrics import get_daily_weather_data
 from dashboard.utils import get_max_date, get_min_time_of_day
 from dashboard.components.slicer import create_hour_picker
-from dashboard.components.cards import create_sun_times_card
+from dashboard.components.cards import create_sun_times_card, create_min_max_temperature_card
 from dash import ALL
 import dash
 
@@ -23,13 +23,11 @@ def layout(app):
     return html.Div([
         dcc.Store(id='daily-stored-date', data=None),
         dcc.Store(id='selected-hour', data="00:00"),
-        # html.Div(id='weather-information-card'),
         html.Div(id='hour-picker-container')
     ], className='weather-information-layout')
 
 def register_callbacks(app):
     @app.callback(
-        # Output('weather-information-card', 'children'),
         Output('hour-picker-container', 'children'),
         Input('global-date-picker', 'date'),
         State('daily-stored-date', 'data'),
@@ -49,26 +47,23 @@ def register_callbacks(app):
             initial_hour = get_min_time_of_day(table_name, initial_date, project_id)
             hour_picker = create_hour_picker(initial_hour)
             sun_times_card = create_sun_times_card(daily_weather, selected_date, project_id, table_name)
+            min_max_temperature_card = create_min_max_temperature_card(daily_weather, selected_date, project_id, table_name)
 
             if daily_weather is None or daily_weather.empty:
                 logging.warning("No daily weather data found.")
                 return html.Div("No data available for selected date.")
-
-            # hour_cards_layout = html.Div([
-            #     sun_times_card,
-            #     hour_picker,
-            # ], className="hour-picker-row")
-            # return hour_cards_layout
         
             hour_cards_layout = dbc.Row([
                 dbc.Col(
                     sun_times_card,
-                    width=9,
                     className="sun-times-container"
                 ),
                 dbc.Col(
+                    min_max_temperature_card,
+                    className="min-max-temperature-container"
+                ),
+                dbc.Col(
                     hour_picker,
-                    width=3,
                     className="hour-picker-row"
                 )
             ], )

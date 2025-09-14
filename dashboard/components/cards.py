@@ -1,5 +1,6 @@
 import logging
 from dashboard.utils import get_week_range, get_weather_icon, get_sun_times, get_sun_times_icon
+from dashboard.utils import get_min_max_temperature, get_min_max_temperature_icon
 import pandas as pd
 import dash_bootstrap_components as dbc
 from dash import html
@@ -82,48 +83,21 @@ def create_weather_information_card(date_label, col, data_row=None):
         ])
     ], className='weather-information-card')   
 
-def create_hour_picker_card(hour_label, data_row=None):
-    return dbc.Button(
-        hour_label,
-        id={'type': 'hour-card', 'index': hour_label},
-        className="hour-picker-card",
-        n_clicks=0
-    )
-
-def generate_hour_picker_card(df, create_hour_picker_func):
-    try:
-        df["time"] = pd.to_datetime(df["time"], errors="coerce")
-
-        cards = []
-        hours = [datetime.strptime(f"{h:02d}:00", "%H:%M") for h in range(24)]
-        for hour in hours:
-            data_row = None
-            if df is not None and not df.empty:
-                match = df[df['time'].dt.hour == hour.hour]
-                if not match.empty:
-                    data_row = match.iloc[0]
-
-            card = create_hour_picker_func(hour.strftime("%H:%M"), data_row)
-            cards.append(card)
-        return cards
-
-    except Exception as e:
-        logging.error(f'Error generating hour picker cards: {e}')
-        return None
-
 def create_sun_times_card(df, selected_date, project_id, table_name):
     try:
         sunrise = get_sun_times(df, table_name, selected_date, project_id)[0]
+        sunrise_icon = get_sun_times_icon("sunrise")
         sunset = get_sun_times(df, table_name, selected_date, project_id)[1]
+        sunset_icon = get_sun_times_icon("sunset")
         return dbc.Row([
             dbc.Col([
-                    html.Img(src=f'assets/icons/{get_sun_times_icon("sunrise")}', 
+                    html.Img(src=f'assets/icons/{sunrise_icon}', 
                     className='sun-times-icon'),
                     html.P(f"Sunrise: {sunrise}", 
                     className='sun-times-text')
                 ]),
             dbc.Col([
-                    html.Img(src=f'assets/icons/{get_sun_times_icon("sunset")}', 
+                    html.Img(src=f'assets/icons/{sunset_icon}', 
                     className='sun-times-icon'),
                     html.P(f"Sunset: {sunset}", 
                     className='sun-times-text')
@@ -133,3 +107,26 @@ def create_sun_times_card(df, selected_date, project_id, table_name):
         logging.error(f'Error generating hour picker cards: {e}')
         return None
 
+def create_min_max_temperature_card(df, selected_date, project_id, table_name):
+    try:
+        min_temp = get_min_max_temperature(df, table_name, selected_date, project_id)[0]
+        min_temp_icon = get_min_max_temperature_icon("min_temp")
+        max_temp = get_min_max_temperature(df, table_name, selected_date, project_id)[1]
+        max_temp_icon = get_min_max_temperature_icon("max_temp")
+        return dbc.Row([
+            dbc.Col([
+                    html.Img(src=f'assets/icons/{min_temp_icon}', 
+                    className='min-max-icon'),
+                    html.P(f"Min: {min_temp:.2f}°C", 
+                    className='min-text')
+                ]),
+            dbc.Col([
+                    html.Img(src=f'assets/icons/{max_temp_icon}', 
+                    className='min-max-icon'),
+                    html.P(f"Max: {max_temp:.2f}°C", 
+                    className='max-text')
+                ])
+            ], className='min-max-card')
+    except Exception as e:
+        logging.error(f'Error generating min/max temperature card: {e}')
+        return None
