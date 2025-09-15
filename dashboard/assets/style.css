@@ -211,8 +211,8 @@
 }
 
 .sun-times-text {
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   color: #00a99d;
 }
 
@@ -233,13 +233,29 @@
 }
 
 .min-text {
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   color: #1e90ff;
 }
 
 .max-text {
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   color: #ff4500;
+}
+
+.information-logo {
+  height: 180px;
+  width: 180px;
+}
+
+.weather-information-card {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+  background-color: #fff;
 }

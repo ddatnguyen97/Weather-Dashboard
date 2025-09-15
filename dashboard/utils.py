@@ -115,34 +115,6 @@ def get_day_night_icon(description, default='day and night.gif'):
         logging.error(f'Error getting day night icon: {e}')
         return None
     
-# def get_temperature_icon(min_temp, max_temp, default='day and night.gif'):
-#     try:
-#         max_temp = f'{max_temp:.2f}'
-#         min_temp = f'{min_temp:.2f}'
-#         if max_temp:
-#             return 'hot.gif'
-#         elif min_temp:
-#             return 'cold.gif'
-#         else:
-#             return default
-#     except Exception as e:
-#         logging.error(f'Error getting temperature icon: {e}')
-#         return None
-
-def get_min_temperature(df, date_col, temp_col):
-    try:
-        return df.groupby(date_col)[temp_col].min()
-    except Exception as e:
-        logging.error(f'Error getting min temp: {e}')
-        return None
-    
-def get_max_temperature(df, date_col, temp_col):
-    try:
-        return df.groupby(date_col)[temp_col].max()
-    except Exception as e:
-        logging.error(f'Error getting max temp: {e}')
-        return None
-    
 def get_sun_times(df, table_name, selected_date, project_id):
     try:
         client = bq.Client(project=project_id)
@@ -210,3 +182,4 @@ def get_min_max_temperature_icon(temperature, default='day and night.gif'):
     except Exception as e:
         logging.error(f'Error getting temperature icon: {e}')
         return None
+        

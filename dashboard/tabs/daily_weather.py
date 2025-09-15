@@ -4,10 +4,11 @@ import logging
 from dotenv import load_dotenv
 import os
 from dash.exceptions import PreventUpdate
+from flask import app
 from dashboard.metrics import get_daily_weather_data
 from dashboard.utils import get_max_date, get_min_time_of_day
 from dashboard.components.slicer import create_hour_picker
-from dashboard.components.cards import create_sun_times_card, create_min_max_temperature_card
+from dashboard.components.cards import create_sun_times_card, create_min_max_temperature_card, create_weather_information_card
 from dash import ALL
 import dash
 
@@ -22,8 +23,10 @@ def layout(app):
 
     return html.Div([
         dcc.Store(id='daily-stored-date', data=None),
-        dcc.Store(id='selected-hour', data="00:00"),
-        html.Div(id='hour-picker-container')
+        dcc.Store(id='selected-hour', data=None),
+        # dcc.Store(id='hourly-stored-date', data=None),
+        html.Div(id='hour-picker-container'),
+        html.Div(id='weather-information-container')
     ], className='weather-information-layout')
 
 def register_callbacks(app):
@@ -34,7 +37,7 @@ def register_callbacks(app):
         State('selected-hour', 'data'),
         prevent_initial_call=False
     )
-    def update_weather_layout(selected_date, stored_date, selected_hour):
+    def update_weather_layout(selected_date, stored_date, stored_hour):
         try:
             if not selected_date:
                 raise PreventUpdate
@@ -43,30 +46,26 @@ def register_callbacks(app):
                 raise PreventUpdate
 
             daily_weather = get_daily_weather_data(selected_date, table_name, project_id)
-            initial_date = get_max_date(table_name, project_id)
-            initial_hour = get_min_time_of_day(table_name, initial_date, project_id)
+            if daily_weather is None or daily_weather.empty:
+                logging.warning("No daily weather data found.")
+                return html.Div("No data available for selected date.")
+
+            if stored_hour:
+                initial_hour = stored_hour
+            else:
+                initial_date = get_max_date(table_name, project_id)
+                initial_hour = get_min_time_of_day(table_name, initial_date, project_id)
+
             hour_picker = create_hour_picker(initial_hour)
             sun_times_card = create_sun_times_card(daily_weather, selected_date, project_id, table_name)
             min_max_temperature_card = create_min_max_temperature_card(daily_weather, selected_date, project_id, table_name)
 
-            if daily_weather is None or daily_weather.empty:
-                logging.warning("No daily weather data found.")
-                return html.Div("No data available for selected date.")
-        
             hour_cards_layout = dbc.Row([
-                dbc.Col(
-                    sun_times_card,
-                    className="sun-times-container"
-                ),
-                dbc.Col(
-                    min_max_temperature_card,
-                    className="min-max-temperature-container"
-                ),
-                dbc.Col(
-                    hour_picker,
-                    className="hour-picker-row"
-                )
-            ], )
+                dbc.Col(sun_times_card, className="sun-times-container"),
+                dbc.Col(min_max_temperature_card, className="min-max-temperature-container"),
+                dbc.Col(hour_picker, className="hour-picker-row")
+            ])
+
             return hour_cards_layout
 
         except PreventUpdate:
@@ -74,3 +73,33 @@ def register_callbacks(app):
         except Exception as e:
             logging.error(f"Callback error: {e}")
             return html.Div("Failed to load information.")
+
+    @app.callback(
+            Output('selected-hour', 'data'),
+            Input('global-hour-picker', 'value'),
+            prevent_initial_call=True
+        )
+    def sync_hour_to_store(selected_hour):
+        if not selected_hour:
+            raise PreventUpdate
+        return selected_hour
+
+    @app.callback(
+        Output('weather-information-container', 'children'),
+        Input('global-date-picker', 'date'),
+        Input('selected-hour', 'data'),
+        prevent_initial_call=True
+    )
+    def update_information_card(selected_date, selected_hour):
+        if not selected_date or not selected_hour:
+            raise PreventUpdate
+
+        df = get_daily_weather_data(selected_date, table_name, project_id)
+        if df is None or df.empty:
+            return dbc.CardBody("No data available for selected date.")
+
+        information_card = create_weather_information_card(
+            df, selected_date, selected_hour, 'weather'
+        )
+
+        return dbc.Row([information_card], className='weather-information-card')

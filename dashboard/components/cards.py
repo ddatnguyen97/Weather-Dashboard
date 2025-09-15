@@ -51,37 +51,31 @@ def generate_weekly_weather_cards(df, selected_date, create_card_func):
         logging.error(f'Error generating weekly weather cards: {e}')
         return None
 
-def create_weather_information_card(date_label, col, data_row=None):
-    if data_row is None:
-        return dbc.Card([
-            html.Div(date_label, className='card-header'),
-            dbc.CardBody('No Data', className='text-muted')
+def create_weather_information_card(df, selected_date, selected_hour, col, data_row=None):
+    df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d', errors='coerce').dt.date
+    df['time'] = pd.to_datetime(df['time'], format='%H:%M:%S', errors='coerce').dt.time
+
+    selected_date_dt = pd.to_datetime(selected_date, format='%Y-%m-%d', errors='coerce').date()
+    selected_hour_dt = pd.to_datetime(selected_hour, errors='coerce').time()
+
+    match = df[(df['date'] == selected_date_dt) & (df['time'] == selected_hour_dt)]
+    
+    if match.empty:
+        return dbc.Row([
+            html.Div('No Data', className='card-header'),
+            dbc.CardBody('No matching data found for selected time.', className='text-muted')
         ])
     
+    data_row = match.iloc[0]
     description = data_row.get(col)
     icon = get_weather_icon(description)
 
-    return dbc.Card([
-        html.P(date_label, className='card-header'),
-        dbc.CardBody([
-            dbc.Col(
-                html.Img(src=f'assets/icons/{icon}', className='daily-weather-icon'),
-                dbc.Row([
-                    dbc.Col(
-                        html.Img(src=f'assets/icons/{icon}', className='daily-information-icon'),
-                        html.P(f"{data_row['sunrise']}")
-                        ),
-                    dbc.Col(
-                        html.Img(src=f'assets/icons/{icon}', className='daily-information-icon'),
-                        html.P(f"{data_row['sunset']}")
-                    )
-                ])
-            , className='information-logo'),
-            dbc.Col(
-
-            )
+    return dbc.Row([
+        dbc.Col([
+            html.Img(src=f'assets/icons/{icon}', className='information-logo'),
+            html.P(f"{data_row['weather']}", className='daily-weather-content')
         ])
-    ], className='weather-information-card')   
+    ])
 
 def create_sun_times_card(df, selected_date, project_id, table_name):
     try:
