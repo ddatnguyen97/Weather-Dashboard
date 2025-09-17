@@ -1,4 +1,7 @@
 (function () {
+  if (window._trackingInitialized) return;
+  window._trackingInitialized = true;
+
   function pushEvent(eventName, value) {
     if (!value) return;
 
