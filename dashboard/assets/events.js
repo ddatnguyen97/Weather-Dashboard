@@ -71,8 +71,17 @@
     }
   }
 
+  function waitForDropdownElement(selector, callback) {
+    const el = document.querySelector(selector);
+    if (el) {
+      callback(el);
+    } else {
+      setTimeout(() => waitForDropdownElement(selector, callback), 300);
+    }
+  }
+
   function trackDropdownSelection(selector, eventName) {
-    waitForElement(selector, (targetNode) => {
+    waitForDropdownElement(selector, (targetNode) => {
       let lastValue = targetNode.textContent.trim();
 
       const observer = new MutationObserver(() => {
@@ -96,7 +105,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     waitForInput("#global-date-picker input", "click_date_filter_btn");
     waitForSidebarLinks();
-
     trackDropdownSelection(
       "#react-select-3--value-item",
       "change_hour_dropdown"
