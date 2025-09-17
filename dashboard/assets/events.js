@@ -96,10 +96,10 @@
   document.addEventListener("DOMContentLoaded", () => {
     waitForInput("#global-date-picker input", "click_date_filter_btn");
     waitForSidebarLinks();
+
     trackDropdownSelection(
-      "#react-select-2--value-item",
-      "change_time_dropdown"
+      "#react-select-3--value-item",
+      "change_hour_dropdown"
     );
-    // trackDropdownOpen(".Select-control", "open_time_dropdown");
   });
 })();
