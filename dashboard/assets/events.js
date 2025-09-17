@@ -85,10 +85,7 @@
       let lastValue = "";
 
       const observer = new MutationObserver(() => {
-        const labelEl = container.querySelector(".Select-value-label");
-        if (!labelEl) return;
-
-        const selectedValue = labelEl.textContent.trim();
+        const selectedValue = container.textContent.trim();
         if (!selectedValue || selectedValue === lastValue) return;
 
         lastValue = selectedValue;
