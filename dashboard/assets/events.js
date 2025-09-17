@@ -86,6 +86,7 @@
 
       const observer = new MutationObserver(() => {
         const selectedValue = container.textContent.trim();
+
         if (!selectedValue || selectedValue === lastValue) return;
 
         lastValue = selectedValue;
@@ -94,7 +95,6 @@
 
       observer.observe(container, {
         childList: true,
-        characterData: true,
         subtree: true,
       });
 
