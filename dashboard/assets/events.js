@@ -71,87 +71,35 @@
     }
   }
 
-  // function trackDropdownSelection(wrapperSelector, eventName) {
-  //   const wrapper = document.querySelector(wrapperSelector);
-  //   if (!wrapper) {
-  //     setTimeout(() => trackDropdownSelection(wrapperSelector, eventName), 300);
-  //     return;
-  //   }
+  function trackDropdownSelection(selector, eventName) {
+    waitForElement(selector, (targetNode) => {
+      let lastValue = targetNode.textContent.trim();
 
-  //   const label = wrapper.querySelector(".Select-value-label");
-  //   if (!label) return;
+      const observer = new MutationObserver(() => {
+        const selectedValue = targetNode.textContent.trim();
+        if (!selectedValue || selectedValue === lastValue) return;
 
-  //   let lastValue = label.textContent.trim();
-
-  //   const handler = () => {
-  //     const value = label.textContent.trim();
-  //     if (!value || value === lastValue) return;
-  //     lastValue = value;
-
-  //     pushEvent(eventName, { dropdown_value: value });
-  //   };
-
-  //   new MutationObserver(handler).observe(label, {
-  //     childList: true,
-  //     subtree: true,
-  //     characterData: true,
-  //   });
-
-  //   console.log(`Dropdown value tracking initialized: ${eventName}`);
-  // }
-  function waitForElement(selector, callback) {
-    const node = document.querySelector(selector);
-    if (node) {
-      callback(node);
-    } else {
-      setTimeout(() => waitForElement(selector, callback), 300);
-    }
-  }
-
-  waitForElement("#react-select-2--value-item", (targetNode) => {
-    let lastValue = targetNode.textContent.trim();
-
-    const observer = new MutationObserver(() => {
-      const selectedTime = targetNode.textContent.trim();
-      if (!selectedTime || selectedTime === lastValue) return;
-
-      lastValue = selectedTime;
-      window.dataLayer.push({
-        event: "hourDropdownChange",
-        selectedHour: selectedTime,
-        debug_mode: true,
+        lastValue = selectedValue;
+        pushEvent(eventName, { dropdown_value: selectedValue });
       });
 
-      console.log("Pushed to dataLayer:", selectedTime);
+      observer.observe(targetNode, {
+        childList: true,
+        characterData: true,
+        subtree: true,
+      });
+
+      console.log(`Dropdown tracking initialized for ${eventName}`);
     });
-
-    observer.observe(targetNode, {
-      childList: true,
-      characterData: true,
-      subtree: true,
-    });
-
-    console.log("Hour dropdown tracking initialized");
-  });
-
-  function trackDropdownOpen(controlSelector, eventName) {
-    const control = document.querySelector(controlSelector);
-    if (!control) {
-      setTimeout(() => trackDropdownOpen(controlSelector, eventName), 300);
-      return;
-    }
-
-    control.addEventListener("click", () => {
-      pushEvent(eventName, { dropdown_opened: true });
-    });
-
-    console.log(`Dropdown open tracking initialized: ${eventName}`);
   }
 
   document.addEventListener("DOMContentLoaded", () => {
     waitForInput("#global-date-picker input", "click_date_filter_btn");
     waitForSidebarLinks();
-    trackDropdownSelection("#react-select-2--value", "change_time_dropdown");
-    trackDropdownOpen(".Select-control", "open_time_dropdown");
+    trackDropdownSelection(
+      "#react-select-2--value-item",
+      "change_time_dropdown"
+    );
+    // trackDropdownOpen(".Select-control", "open_time_dropdown");
   });
 })();
