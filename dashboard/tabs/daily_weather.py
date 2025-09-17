@@ -6,7 +6,7 @@ import os
 from dash.exceptions import PreventUpdate
 from flask import app
 from dashboard.metrics import get_daily_weather_data
-from dashboard.utils import get_max_date, get_min_time_of_day
+from dashboard.utils import get_max_date, get_min_time_of_day, WEATHER_INFORMATION_ICON_MAP
 from dashboard.components.slicer import create_hour_picker
 from dashboard.components.cards import create_sun_times_card, create_min_max_temperature_card, create_weather_information_card
 from dash import ALL
@@ -61,10 +61,10 @@ def register_callbacks(app):
             min_max_temperature_card = create_min_max_temperature_card(daily_weather, selected_date, project_id, table_name)
 
             hour_cards_layout = dbc.Row([
-                dbc.Col(sun_times_card, className="sun-times-container"),
-                dbc.Col(min_max_temperature_card, className="min-max-temperature-container"),
-                dbc.Col(hour_picker, className="hour-picker-row")
-            ])
+                dbc.Col(sun_times_card),
+                dbc.Col(min_max_temperature_card),
+                dbc.Col(hour_picker, className="hour-picker-container")
+            ], className='hour-card-row')
 
             return hour_cards_layout
 
@@ -99,7 +99,13 @@ def register_callbacks(app):
             return dbc.CardBody("No data available for selected date.")
 
         information_card = create_weather_information_card(
-            df, selected_date, selected_hour, 'weather'
+            df, selected_date, selected_hour
         )
 
-        return dbc.Row([information_card], className='weather-information-card')
+        information_card_layout = dbc.Row(
+            [information_card],
+            className='weather-information-card-row',
+            # fluid=True
+            )
+
+        return information_card_layout

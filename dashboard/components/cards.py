@@ -1,6 +1,7 @@
 import logging
 from dashboard.utils import get_week_range, get_weather_icon, get_sun_times, get_sun_times_icon
-from dashboard.utils import get_min_max_temperature, get_min_max_temperature_icon
+from dashboard.utils import get_min_max_temperature, get_min_max_temperature_icon, get_weather_information_icon
+from dashboard.utils import WEATHER_INFORMATION_ICON_MAP
 import pandas as pd
 import dash_bootstrap_components as dbc
 from dash import html
@@ -51,7 +52,7 @@ def generate_weekly_weather_cards(df, selected_date, create_card_func):
         logging.error(f'Error generating weekly weather cards: {e}')
         return None
 
-def create_weather_information_card(df, selected_date, selected_hour, col, data_row=None):
+def create_weather_information_card(df, selected_date, selected_hour):
     df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d', errors='coerce').dt.date
     df['time'] = pd.to_datetime(df['time'], format='%H:%M:%S', errors='coerce').dt.time
 
@@ -59,24 +60,49 @@ def create_weather_information_card(df, selected_date, selected_hour, col, data_
     selected_hour_dt = pd.to_datetime(selected_hour, errors='coerce').time()
 
     match = df[(df['date'] == selected_date_dt) & (df['time'] == selected_hour_dt)]
-    
     if match.empty:
         return dbc.Row([
             html.Div('No Data', className='card-header'),
             dbc.CardBody('No matching data found for selected time.', className='text-muted')
         ])
-    
+
     data_row = match.iloc[0]
-    description = data_row.get(col)
-    icon = get_weather_icon(description)
 
+    weather_icon = get_weather_icon(data_row.get("weather", ""))
+    
     return dbc.Row([
-        dbc.Col([
-            html.Img(src=f'assets/icons/{icon}', className='information-logo'),
-            html.P(f"{data_row['weather']}", className='daily-weather-content')
-        ])
-    ])
+                dbc.Col([
+                    html.Img(src=f"/assets/icons/{weather_icon}", className="information-logo"),
+                    html.P(f"{data_row.get('weather', 'N/A')}", className="information-weather-content")
+                ], className="weather-information-col"),
 
+                dbc.Col([
+                    dbc.Row([
+                        dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('cloud_cover')}", className="information-icon")),
+                        dbc.Col(html.P(f"Cloud Cover: {data_row.get('cloud_cover', 'N/A'):.2f}", className="information-text"))
+                    ], className="weather-information-row"),
+                    dbc.Row([
+                        dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('dew_point')}", className="information-icon")),
+                        dbc.Col(html.P(f"Dew Point: {data_row.get('dew_point', 'N/A'):.2f}", className="information-text"))
+                    ], className="weather-information-row"),
+                ], className="weather-information-col"),
+
+                dbc.Col([
+                    dbc.Row([
+                        dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('wind_speed')}", className="information-icon")),
+                        dbc.Col(html.P(f"Wind Speed: {data_row.get('wind_speed', 'N/A'):.2f}", className="information-text"))
+                    ], className="weather-information-row"),
+                    dbc.Row([
+                        dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('wind_gusts')}", className="information-icon")),
+                        dbc.Col(html.P(f"Wind Gusts: {data_row.get('wind_gusts', 'N/A'):.2f}", className="information-text"))
+                    ], className="weather-information-row"),
+                    dbc.Row([
+                        dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('wind_direction_label')}", className="information-icon")),
+                        dbc.Col(html.P(f"Wind Direction: {data_row.get('wind_direction_label', 'N/A')}", className="information-text"))
+                    ], className="weather-information-row"),
+                ], className="weather-information-col"),
+            ], className="weather-information-card")
+            
 def create_sun_times_card(df, selected_date, project_id, table_name):
     try:
         sunrise = get_sun_times(df, table_name, selected_date, project_id)[0]

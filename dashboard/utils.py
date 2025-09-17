@@ -182,4 +182,15 @@ def get_min_max_temperature_icon(temperature, default='day and night.gif'):
     except Exception as e:
         logging.error(f'Error getting temperature icon: {e}')
         return None
-        
+
+WEATHER_INFORMATION_ICON_MAP = {
+        "temperature": "thermometer.gif",
+        "humidity": "humidity.gif",
+        "dew_point": "leaf.gif",
+        "cloud_cover": "cloudy.gif",
+        "wind_speed": "wind.gif",
+        "wind_gusts": "gusts.gif",
+        "wind_direction_label": "compass.gif",
+    }
+def get_weather_information_icon(information, icon_mapping=WEATHER_INFORMATION_ICON_MAP, default='day and night.gif'):
+    return icon_mapping.get(information, default)
