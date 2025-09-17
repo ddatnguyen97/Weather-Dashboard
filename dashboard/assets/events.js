@@ -83,14 +83,20 @@
   function trackDropdownSelection(containerSelector, eventName) {
     waitForDropdownElement(containerSelector, (container) => {
       let lastValue = "";
+      let debounceTimer = null;
 
       const observer = new MutationObserver(() => {
-        const selectedValue = container.textContent.trim();
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          const labelEl = container.querySelector(".Select-value-label");
+          if (!labelEl) return;
 
-        if (!selectedValue || selectedValue === lastValue) return;
+          const selectedValue = labelEl.textContent.trim();
+          if (!selectedValue || selectedValue === lastValue) return;
 
-        lastValue = selectedValue;
-        pushEvent(eventName, { dropdown_value: selectedValue });
+          lastValue = selectedValue;
+          pushEvent(eventName, { dropdown_value: selectedValue });
+        }, 50); // debounce to prevent double push
       });
 
       observer.observe(container, {
