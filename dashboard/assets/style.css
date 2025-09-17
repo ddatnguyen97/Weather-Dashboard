@@ -304,5 +304,13 @@
   flex: 1;
   text-align: center;
   align-items: center;
-  justify-items: center;
+}
+
+.information-icon-col {
+  justify-content: flex-end;
+}
+
+.information-text-col {
+  text-align: center;
+  justify-content: flex-start;
 }

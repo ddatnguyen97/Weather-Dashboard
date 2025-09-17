@@ -70,9 +70,53 @@
       setTimeout(waitForSidebarLinks, 300);
     }
   }
+  function trackDropdownSelection(wrapperSelector, eventName) {
+    const wrapper = document.querySelector(wrapperSelector);
+    if (!wrapper) {
+      setTimeout(() => trackDropdownSelection(wrapperSelector, eventName), 300);
+      return;
+    }
+
+    const label = wrapper.querySelector(".Select-value-label");
+    if (!label) return;
+
+    let lastValue = label.textContent.trim();
+
+    const handler = () => {
+      const value = label.textContent.trim();
+      if (!value || value === lastValue) return;
+      lastValue = value;
+
+      pushEvent(eventName, { dropdown_value: value });
+    };
+
+    new MutationObserver(handler).observe(label, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+
+    console.log(`Dropdown value tracking initialized: ${eventName}`);
+  }
+
+  function trackDropdownOpen(controlSelector, eventName) {
+    const control = document.querySelector(controlSelector);
+    if (!control) {
+      setTimeout(() => trackDropdownOpen(controlSelector, eventName), 300);
+      return;
+    }
+
+    control.addEventListener("click", () => {
+      pushEvent(eventName, { dropdown_opened: true });
+    });
+
+    console.log(`Dropdown open tracking initialized: ${eventName}`);
+  }
 
   document.addEventListener("DOMContentLoaded", () => {
     waitForInput("#global-date-picker input", "click_date_filter_btn");
     waitForSidebarLinks();
+    trackDropdownSelection("#react-select-3--value", "change_time_dropdown");
+    trackDropdownOpen(".Select-control", "open_time_dropdown");
   });
 })();

@@ -78,27 +78,38 @@ def create_weather_information_card(df, selected_date, selected_hour):
 
                 dbc.Col([
                     dbc.Row([
-                        dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('cloud_cover')}", className="information-icon")),
-                        dbc.Col(html.P(f"Cloud Cover: {data_row.get('cloud_cover', 'N/A'):.2f}", className="information-text"))
+                        dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('cloud_cover')}", className="information-icon"),
+                                        className="information-icon-col"
+                                        ),
+                        dbc.Col(html.P(f"Cloud Cover: {data_row.get('cloud_cover', 'N/A'):.2f}", className="information-text"), 
+                                className="information-text-col")
                     ], className="weather-information-row"),
                     dbc.Row([
-                        dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('dew_point')}", className="information-icon")),
-                        dbc.Col(html.P(f"Dew Point: {data_row.get('dew_point', 'N/A'):.2f}", className="information-text"))
+                        dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('dew_point')}", className="information-icon"), 
+                                className="information-icon-col"),
+                        dbc.Col(html.P(f"Dew Point: {data_row.get('dew_point', 'N/A'):.2f}", className="information-text"), 
+                                className="information-text-col")
                     ], className="weather-information-row"),
                 ], className="weather-information-col"),
 
                 dbc.Col([
                     dbc.Row([
-                        dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('wind_speed')}", className="information-icon")),
-                        dbc.Col(html.P(f"Wind Speed: {data_row.get('wind_speed', 'N/A'):.2f}", className="information-text"))
+                        dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('wind_speed')}", className="information-icon"), 
+                                className="information-icon-col"),
+                        dbc.Col(html.P(f"Wind Speed: {data_row.get('wind_speed', 'N/A'):.2f}", className="information-text"), 
+                                className="information-text-col")
                     ], className="weather-information-row"),
                     dbc.Row([
-                        dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('wind_gusts')}", className="information-icon")),
-                        dbc.Col(html.P(f"Wind Gusts: {data_row.get('wind_gusts', 'N/A'):.2f}", className="information-text"))
+                        dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('wind_gusts')}", className="information-icon"), 
+                                className="information-icon-col"),
+                        dbc.Col(html.P(f"Wind Gusts: {data_row.get('wind_gusts', 'N/A'):.2f}", className="information-text"), 
+                                className="information-text-col")
                     ], className="weather-information-row"),
                     dbc.Row([
-                        dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('wind_direction_label')}", className="information-icon")),
-                        dbc.Col(html.P(f"Wind Direction: {data_row.get('wind_direction_label', 'N/A')}", className="information-text"))
+                        dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('wind_direction_label')}", className="information-icon"), 
+                                className="information-icon-col"),
+                        dbc.Col(html.P(f"Wind Direction: {data_row.get('wind_direction_label', 'N/A')}", className="information-text"), 
+                                className="information-text-col")
                     ], className="weather-information-row"),
                 ], className="weather-information-col"),
             ], className="weather-information-card")
