@@ -80,19 +80,22 @@
     }
   }
 
-  function trackDropdownSelection(selector, eventName) {
-    waitForDropdownElement(selector, (targetNode) => {
-      let lastValue = targetNode.textContent.trim();
+  function trackDropdownSelection(containerSelector, eventName) {
+    waitForDropdownElement(containerSelector, (container) => {
+      let lastValue = "";
 
       const observer = new MutationObserver(() => {
-        const selectedValue = targetNode.textContent.trim();
+        const labelEl = container.querySelector(".Select-value-label");
+        if (!labelEl) return;
+
+        const selectedValue = labelEl.textContent.trim();
         if (!selectedValue || selectedValue === lastValue) return;
 
         lastValue = selectedValue;
         pushEvent(eventName, { dropdown_value: selectedValue });
       });
 
-      observer.observe(targetNode, {
+      observer.observe(container, {
         childList: true,
         characterData: true,
         subtree: true,
@@ -105,9 +108,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     waitForInput("#global-date-picker input", "click_date_filter_btn");
     waitForSidebarLinks();
-    trackDropdownSelection(
-      "#react-select-3--value-item",
-      "change_hour_dropdown"
-    );
+
+    trackDropdownSelection("#global-hour-picker", "change_hour_dropdown");
   });
 })();
