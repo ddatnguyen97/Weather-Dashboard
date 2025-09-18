@@ -279,8 +279,8 @@
 
 .weather-information-row {
   align-items: center;
-  justify-content: flex-start;
-  gap: 15px;
+  /* justify-content: flex-start; */
+  gap: 5px;
   border-radius: 10px;
   padding: 15px;
   width: 100%;
@@ -307,10 +307,23 @@
 }
 
 .information-icon-col {
+  display: flex;
   justify-content: flex-end;
+  align-items: center;
 }
 
 .information-text-col {
-  text-align: center;
+  display: flex;
   justify-content: flex-start;
+  align-items: center;
+}
+
+.information-icon-col,
+.information-text-col {
+  padding: 5;
+}
+
+.information-text {
+  white-space: nowrap;
+  margin: 0;
 }
