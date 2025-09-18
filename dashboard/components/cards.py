@@ -81,13 +81,19 @@ def create_weather_information_card(df, selected_date, selected_hour):
                         dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('cloud_cover')}", className="information-icon"),
                                         className="information-icon-col"
                                         ),
-                        dbc.Col(html.P(f"Cloud Cover: {data_row.get('cloud_cover', 'N/A'):.2f}", className="information-text"), 
+                        dbc.Col(html.P(f"Cloud Cover: {data_row.get('cloud_cover', 'N/A'):.2f}%", className="information-text"), 
                                 className="information-text-col")
                     ], className="weather-information-row"),
                     dbc.Row([
                         dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('dew_point')}", className="information-icon"), 
                                 className="information-icon-col"),
-                        dbc.Col(html.P(f"Dew Point: {data_row.get('dew_point', 'N/A'):.2f}", className="information-text"), 
+                        dbc.Col(html.P(f"Dew Point: {data_row.get('dew_point', 'N/A'):.2f}°C", className="information-text"), 
+                                className="information-text-col")
+                    ], className="weather-information-row"),
+                    dbc.Row([
+                        dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('humidity')}", className="information-icon"), 
+                                className="information-icon-col"),
+                        dbc.Col(html.P(f"Humidity: {data_row.get('humidity', 'N/A'):.2f}%", className="information-text"), 
                                 className="information-text-col")
                     ], className="weather-information-row"),
                 ], className="weather-information-col"),
@@ -96,13 +102,13 @@ def create_weather_information_card(df, selected_date, selected_hour):
                     dbc.Row([
                         dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('wind_speed')}", className="information-icon"), 
                                 className="information-icon-col"),
-                        dbc.Col(html.P(f"Wind Speed: {data_row.get('wind_speed', 'N/A'):.2f}", className="information-text"), 
+                        dbc.Col(html.P(f"Wind Speed: {data_row.get('wind_speed', 'N/A'):.2f} km/h", className="information-text"), 
                                 className="information-text-col")
                     ], className="weather-information-row"),
                     dbc.Row([
                         dbc.Col(html.Img(src=f"/assets/icons/{get_weather_information_icon('wind_gusts')}", className="information-icon"), 
                                 className="information-icon-col"),
-                        dbc.Col(html.P(f"Wind Gusts: {data_row.get('wind_gusts', 'N/A'):.2f}", className="information-text"), 
+                        dbc.Col(html.P(f"Wind Gusts: {data_row.get('wind_gusts', 'N/A'):.2f} km/h", className="information-text"), 
                                 className="information-text-col")
                     ], className="weather-information-row"),
                     dbc.Row([
@@ -113,7 +119,7 @@ def create_weather_information_card(df, selected_date, selected_hour):
                     ], className="weather-information-row"),
                 ], className="weather-information-col"),
             ], className="weather-information-card")
-            
+
 def create_sun_times_card(df, selected_date, project_id, table_name):
     try:
         sunrise = get_sun_times(df, table_name, selected_date, project_id)[0]

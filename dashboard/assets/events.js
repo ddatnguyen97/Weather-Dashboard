@@ -74,41 +74,6 @@
     }
   }
 
-  // function waitForDropdownElement(selector, callback) {
-  //   const el = document.querySelector(selector);
-  //   if (el) {
-  //     callback(el);
-  //   } else {
-  //     setTimeout(() => waitForDropdownElement(selector, callback), 300);
-  //   }
-  // }
-
-  // function trackDropdownSelection(containerSelector, eventName) {
-  //   waitForDropdownElement(containerSelector, (container) => {
-  //     let lastValue = "";
-
-  //     const observer = new MutationObserver(() => {
-  //       const labelEl = container.querySelector(".Select-value-label");
-  //       if (!labelEl) return;
-
-  //       const selectedValue = labelEl.textContent.trim();
-
-  //       if (!selectedValue || selectedValue === lastValue) return;
-
-  //       lastValue = selectedValue;
-  //       pushEvent(eventName, { dropdown_value: selectedValue });
-  //     });
-
-  //     observer.observe(container, {
-  //       childList: true,
-  //       subtree: true,
-  //       characterData: true,
-  //     });
-
-  //     console.log(`Dropdown tracking initialized for ${eventName}`);
-  //   });
-  // }
-
   function waitForDropdownElement(selector, callback) {
     const el = document.querySelector(selector);
     if (el) {
@@ -159,7 +124,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     waitForInput("#global-date-picker input", "click_date_filter_btn");
     waitForSidebarLinks();
-
     trackDropdownSelection("#global-hour-picker", "change_hour_dropdown");
   });
 })();

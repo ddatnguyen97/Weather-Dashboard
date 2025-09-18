@@ -47,7 +47,7 @@ def register_callbacks(app):
 
             y_axis = 'precipitation'
             x_axis = 'date'
-            bar_chart_title = "Weekly Precipitation Report"
+            bar_chart_title = "Weekly Precipitation Report (mm)"
             color = ['#43C4E3']
             bar_chart = create_bar_chart(weekly_data, 
                                         x_axis, 
@@ -61,7 +61,7 @@ def register_callbacks(app):
             color_continuous = 'Darkmint'
             category_order_val = 'daily_frequent_direction'
             hover_val = 'date'
-            radar_chart_title = "Weekly Wind Report"
+            radar_chart_title = "Weekly Wind Report (Speed, Gusts & Direction - km/h)"
             radar_chart = create_radar_chart(weekly_data,
                                             r, 
                                             theta_val,

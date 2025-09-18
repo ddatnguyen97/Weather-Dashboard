@@ -88,3 +88,4 @@ def get_daily_weather_data(date, table_name, project_id):
     except Exception as e:
         logging.error(f'Error fetching daily weather data: {e}')
         return None
+
