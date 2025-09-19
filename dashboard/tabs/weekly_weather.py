@@ -19,8 +19,14 @@ def layout(app):
 
     return html.Div([
         dcc.Store(id='weekly-stored-date', data=None),
-        html.Div(id='weather-cards-container'),
-        html.Div(id='weather-charts-container'),
+
+        dcc.Loading(
+            type="circle",
+            children=html.Div([
+                html.Div(id='weather-cards-container'),
+                html.Div(id='weather-charts-container')
+            ])
+        )
     ], className='weather-layout')
 
 def register_callbacks(app):

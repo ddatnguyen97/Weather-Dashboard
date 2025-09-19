@@ -89,3 +89,29 @@ def get_daily_weather_data(date, table_name, project_id):
         logging.error(f'Error fetching daily weather data: {e}')
         return None
 
+def get_daily_precipitation_data(date, table_name, project_id):
+    try:
+        selected_date = date
+        query = f'''
+            select 
+                date,
+                time,
+                precipitation,
+                temperature_2m as temperature,
+                apparent_temperature
+            from
+                `{table_name}`
+            where
+                date = '{selected_date}'
+            order by
+                time
+        '''
+        client = bq.Client(project=project_id)
+        result = client.query(query).to_dataframe()
+        if result.empty:
+            logging.info('No data found for the specified date range.')
+            return result
+        return result
+    except Exception as e:
+        logging.error(f'Error fetching daily precipitation data: {e}')
+        return None

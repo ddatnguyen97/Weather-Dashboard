@@ -4,11 +4,11 @@ import logging
 from dotenv import load_dotenv
 import os
 from dash.exceptions import PreventUpdate
-from flask import app
-from dashboard.metrics import get_daily_weather_data
+from dashboard.metrics import get_daily_weather_data, get_daily_precipitation_data
 from dashboard.utils import get_max_date, get_min_time_of_day, WEATHER_INFORMATION_ICON_MAP
 from dashboard.components.slicer import create_hour_picker
 from dashboard.components.cards import create_sun_times_card, create_min_max_temperature_card, create_weather_information_card
+from dashboard.charts import create_combined_bar_line_chart, create_bar_chart
 from dash import ALL
 import dash
 
@@ -20,13 +20,18 @@ project_id = os.getenv('BQ_PROJECT_ID')
 
 def layout(app):
     register_callbacks(app)
-
     return html.Div([
-        dcc.Store(id='daily-stored-date', data=None),
-        dcc.Store(id='selected-hour', data=None),
-        # dcc.Store(id='hourly-stored-date', data=None),
-        html.Div(id='hour-picker-container'),
-        html.Div(id='weather-information-container')
+    dcc.Store(id='daily-stored-date', data=None),
+    dcc.Store(id='selected-hour', data=None),
+
+    dcc.Loading(
+        type="circle",
+        children=html.Div([
+            html.Div(id='hour-picker-container'),
+            html.Div(id='weather-information-container'),
+            html.Div(id='hourly-weather-charts-container')
+        ])
+    )
     ], className='weather-information-layout')
 
 def register_callbacks(app):
@@ -77,7 +82,7 @@ def register_callbacks(app):
     @app.callback(
             Output('selected-hour', 'data'),
             Input('global-hour-picker', 'value'),
-            prevent_initial_call=True
+            prevent_initial_call=False
         )
     def sync_hour_to_store(selected_hour):
         if not selected_hour:
@@ -88,7 +93,7 @@ def register_callbacks(app):
         Output('weather-information-container', 'children'),
         Input('global-date-picker', 'date'),
         Input('selected-hour', 'data'),
-        prevent_initial_call=True
+        prevent_initial_call=False
     )
     def update_information_card(selected_date, selected_hour):
         if not selected_date or not selected_hour:
@@ -103,9 +108,55 @@ def register_callbacks(app):
         )
 
         information_card_layout = dbc.Row(
-            [information_card],
-            className='weather-information-card-row',
-            # fluid=True
+                                    (information_card,),
+                                    className='weather-information-card-row'
+                                )
+        return information_card_layout
+    
+    @app.callback(
+        Output('hourly-weather-charts-container', 'children'),
+        Input('global-date-picker', 'date'),
+        prevent_initial_call=False
+    )
+    def update_hourly_weather_chart(selected_date):
+        try:
+            if not selected_date:
+                logging.warning("No date selected from global-date-picker")
+                return html.Div("Please select a date to view the chart.")
+
+            selected_date_str = str(selected_date)
+            precipitation_data = get_daily_precipitation_data(
+                selected_date_str, table_name, project_id
             )
 
-        return information_card_layout
+            if precipitation_data is None or precipitation_data.empty:
+                logging.warning(f"No daily precipitation data found for {selected_date_str}")
+                return html.Div(f"No data available for {selected_date_str}.")
+
+            precipitation_data['time'] = precipitation_data['time'].astype(str)
+
+            bar_x='time'
+            bar_y='precipitation'
+            title=f"Hourly Precipitation Report"
+            bar_color='#43C4E3'
+            line_ys=['temperature', 'apparent_temperature']
+            line_colors=['#FFA07A', '#C4175C']
+            
+            combined_chart = create_combined_bar_line_chart(
+                precipitation_data,
+                bar_x=bar_x,
+                bar_y=bar_y,
+                title=title,
+                bar_color=bar_color,
+                line_ys=line_ys,
+                line_colors=line_colors
+            )
+            chart_layout = dbc.Row(combined_chart,
+                                    className='daily-weather-chart-row'
+                                    )
+            return chart_layout
+
+        except Exception as e:
+            logging.error(f"Callback error while building hourly chart: {e}")
+            return html.Div("Failed to load chart.")
+

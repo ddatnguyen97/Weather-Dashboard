@@ -70,7 +70,8 @@ def create_weather_information_card(df, selected_date, selected_hour):
 
     weather_icon = get_weather_icon(data_row.get("weather", ""))
     
-    return dbc.Row([
+    return dbc.Card(
+            dbc.Row([
                 dbc.Col([
                     html.Img(src=f"/assets/icons/{weather_icon}", className="information-logo"),
                     html.P(f"{data_row.get('weather', 'N/A')}", className="information-weather-content")
@@ -117,8 +118,9 @@ def create_weather_information_card(df, selected_date, selected_hour):
                         dbc.Col(html.P(f"Wind Direction: {data_row.get('wind_direction_label', 'N/A')}", className="information-text"), 
                                 className="information-text-col")
                     ], className="weather-information-row"),
-                ], className="weather-information-col"),
-            ], className="weather-information-card")
+                ], className="weather-information-col")],
+            ),
+            className="weather-information-card")
 
 def create_sun_times_card(df, selected_date, project_id, table_name):
     try:
@@ -167,3 +169,5 @@ def create_min_max_temperature_card(df, selected_date, project_id, table_name):
     except Exception as e:
         logging.error(f'Error generating min/max temperature card: {e}')
         return None
+    
+   
