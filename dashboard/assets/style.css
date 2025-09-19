@@ -337,6 +337,7 @@
 
 .weather-information-card-row {
   margin-top: 1rem;
+  width: 100%;
 }
 
 .weather-information-card {
@@ -398,6 +399,7 @@
 }
 
 .daily-weather-chart-row {
-  display: flex;
+  /* display: flex; */
   margin-top: 1rem;
+  width: 100%;
 }
