@@ -27,8 +27,8 @@ LOCATION = {'latitude': 10.762622, 'longitude': 106.660172}
 DATE_RANGE = {
     # 'start_date': f'{start_date}',
     # 'end_date': f'{end_date}',
-    'start_date': '2025-08-23',
-    'end_date': '2025-08-25',
+    'start_date': '2025-09-22',
+    'end_date': '2025-09-22',
 }
 
 DAILY_VARIABLES = [
