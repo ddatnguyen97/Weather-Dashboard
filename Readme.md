@@ -53,7 +53,7 @@ Thank you for your attention.
 
 ## Tools Applied in the Project
 
-1. Programming & Data Processing: Python, pandas, requests
+1. Programming & Data Processing: Python, pandas, requests, SQL
 2. ETL & Orchestration: google-cloud-bigquery, GitHub Actions, cron
 3. Data Storage: Google BigQuery, BigQuery Console
 4. Dashboard Development: Dash, Plotly
