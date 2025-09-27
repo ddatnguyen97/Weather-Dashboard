@@ -1,4 +1,4 @@
-This is a personal project I created to showcase and consolidate my skills for a Data Analytics Engineer role.
+ ## This is a personal project I created to showcase and consolidate my skills for a Data Analytics Engineer role.
 
 - Weather Report Dashboard: [Link](https://weather-dashboard-i6uk.onrender.com/)
 - GA4 Events Tracking Dashboard: [Link](https://lookerstudio.google.com/reporting/f0972566-4b4b-4717-8ec5-1c48f88b1d52)
